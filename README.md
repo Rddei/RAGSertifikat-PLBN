@@ -90,3 +90,20 @@ Di dalam modul backend, diterapkan **Layered Architecture** (Presentation, Busin
 ---
 
 ## Struktur Proyek
+intelligent-compliance-engine/
+├── backend/
+│ ├── api/ # Lapisan Presentasi (API Routes)
+│ ├── services/ # Lapisan Logika Bisnis
+│ ├── core/ # Lapisan Orkestrasi AI (Agent + RAG)
+│ ├── repositories/ # Lapisan Akses Data (ChromaDB)
+│ ├── models/ # Skema Pydantic
+│ ├── knowledge_base/ # Proses chunking, embedding, indexing
+│ ├── data/ # Dokumen pedoman POLBAN (PDF)
+│ └── main.py # Entry point FastAPI
+├── frontend/
+│ ├── app/ # Halaman (Next.js App Router)
+│ ├── components/ # Komponen React
+│ └── public/ # Aset statis
+├── docs/ # Dokumentasi tambahan (opsional)
+├── README.md
+└── .gitignore
