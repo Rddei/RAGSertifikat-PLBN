@@ -107,3 +107,24 @@ intelligent-compliance-engine/
 ├── docs/ # Dokumentasi tambahan (opsional)
 ├── README.md
 └── .gitignore
+
+
+---
+
+## Prasyarat
+
+- **Python 3.11** atau lebih tinggi
+- **Node.js 18** atau lebih tinggi
+- **npm** atau **yarn**
+- **Google Gemini API Key** (dapat diperoleh di [Google AI Studio](https://aistudio.google.com/))
+
+---
+
+## Instalasi dan Menjalankan Aplikasi
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/Rddei/intelligent-compliance-engine.git
+cd intelligent-compliance-engine
+
