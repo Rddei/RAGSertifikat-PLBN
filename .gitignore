@@ -1,0 +1,59 @@
+# -----------------------------------------------------------
+# Python / Conda / Virtual Environment
+# -----------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+.env
+*.log
+
+# Virtual Environment / Conda
+venv/
+env/
+.venv/
+conda/
+
+# Jupyter / Notebook
+.ipynb_checkpoints/
+
+# -----------------------------------------------------------
+# Backend Project Specific
+# -----------------------------------------------------------
+backend/chroma_db/
+backend/uploads/
+backend/knowledge_base/data/
+backend/*.db
+backend/*.sqlite3
+
+# -----------------------------------------------------------
+# Next.js / Frontend
+# -----------------------------------------------------------
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+frontend/.env.local
+
+# -----------------------------------------------------------
+# IDE / Editor
+# -----------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------------------
+# OS Files
+# -----------------------------------------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------------------------------------
+# Docker (jika nanti digunakan)
+# -----------------------------------------------------------
+docker-compose.override.yml

@@ -8,6 +8,9 @@ from models.database import async_engine, Base, AsyncSessionLocal, Admin
 from sqlalchemy.future import select
 from api.routes import documents, applicants, auth, batch
 
+import logging
+logging.getLogger("llama_index").setLevel(logging.ERROR)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with async_engine.begin() as conn:
