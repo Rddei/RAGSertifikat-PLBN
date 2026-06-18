@@ -12,7 +12,7 @@ pydantic
 python-dotenv
 
 # --- Keamanan ---
-passlib[bcrypt]         # hashing password
+bcrypt                  # hashing password (dipakai langsung, tanpa passlib)
 pyjwt                   # token JWT
 
 # --- AI / RAG ---
@@ -26,3 +26,4 @@ chromadb
 # --- Pemrosesan gambar & fraud detection ---
 Pillow
 pyzbar                  # butuh paket sistem: libzbar0 / zbar
+pymupdf                 # render halaman PDF -> gambar untuk fraud scan (opsional)

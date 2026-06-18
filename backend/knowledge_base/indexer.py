@@ -1,43 +1,142 @@
+# knowledge_base/indexer.py
+"""Skrip untuk membangun knowledge base Intelligent Compliance Engine.
+
+Membaca dokumen dari folder data/, memotong menjadi chunks,
+mengonversi menjadi vektor embedding, dan menyimpannya ke ChromaDB.
+
+Penggunaan:
+    python knowledge_base/indexer.py
+
+Prasyarat:
+    - File pedoman (PDF/MD/TXT) sudah diletakkan di folder knowledge_base/data/
+    - File .env sudah berisi GOOGLE_API_KEY yang valid
+"""
 import os
+import sys
+
 import chromadb
-from llama_index.core import SimpleDirectoryReader, Settings, VectorStoreIndex, StorageContext
+from llama_index.core import (
+    Settings,
+    SimpleDirectoryReader,
+    StorageContext,
+    VectorStoreIndex,
+)
+from llama_index.core.node_parser import SentenceSplitter
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.core.node_parser import SentenceSplitter
-from config import GOOGLE_API_KEY, CHROMA_DB_PATH
 
-# Inisialisasi embedding model
-embed_model = GoogleGenAIEmbedding(model="models/embedding-001", api_key=GOOGLE_API_KEY)
+# Pastikan folder backend/ berada di sys.path agar modul `config` dapat
+# diimpor meskipun skrip dijalankan dari folder knowledge_base/.
+sys.path.insert(
+    0,
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+)
+
+from config import GOOGLE_API_KEY, CHROMA_DB_PATH  # noqa: E402
+
+# ---------------------------------------------------------------------------
+# Konfigurasi Embedding Model
+# ---------------------------------------------------------------------------
+embed_model = GoogleGenAIEmbedding(
+    model="models/embedding-001",
+    api_key=GOOGLE_API_KEY,
+)
 Settings.embed_model = embed_model
 
-# Tentukan direktori sumber dokumen (folder data/)
+# ---------------------------------------------------------------------------
+# Konfigurasi Direktori Data
+# ---------------------------------------------------------------------------
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
+# ---------------------------------------------------------------------------
+# Konfigurasi Chunking
+# ---------------------------------------------------------------------------
+CHUNK_SIZE = 1024       # Jumlah token per chunk
+CHUNK_OVERLAP = 200     # Jumlah token tumpang tindih antar chunk
 
-def build_knowledge_base():
-    if not os.path.exists(DATA_DIR) or not os.listdir(DATA_DIR):
-        raise FileNotFoundError(f"Tidak ada file di {DATA_DIR}. Letakkan file PDF pedoman di sini.")
+# ---------------------------------------------------------------------------
+# Konfigurasi ChromaDB
+# ---------------------------------------------------------------------------
+COLLECTION_NAME = "polban_rules"
 
-    # Baca dokumen
+
+# ---------------------------------------------------------------------------
+# Fungsi Utama
+# ---------------------------------------------------------------------------
+def build_knowledge_base() -> None:
+    """
+    Membangun knowledge base dari dokumen di folder data/.
+
+    Tahapan:
+        1. Membaca seluruh dokumen di DATA_DIR.
+        2. Memotong dokumen menjadi chunks.
+        3. Mengonversi chunks menjadi vektor embedding.
+        4. Menyimpan vektor ke ChromaDB (selalu mulai dari kondisi bersih).
+
+    Raises:
+        FileNotFoundError: Jika folder data/ kosong atau tidak ditemukan.
+    """
+    # Validasi direktori data
+    if not os.path.exists(DATA_DIR):
+        raise FileNotFoundError(
+            f"Folder data tidak ditemukan: {DATA_DIR}. "
+            f"Buat folder 'data/' dan letakkan file pedoman di dalamnya."
+        )
+    if not os.listdir(DATA_DIR):
+        raise FileNotFoundError(
+            f"Folder data/ kosong: {DATA_DIR}. "
+            f"Letakkan minimal satu file pedoman di dalamnya."
+        )
+
+    # Tahap 1: Membaca dokumen
+    print("=" * 60)
+    print("MEMBANGUN KNOWLEDGE BASE")
+    print("=" * 60)
+
     reader = SimpleDirectoryReader(DATA_DIR)
     documents = reader.load_data()
-    print(f"Berhasil memuat {len(documents)} dokumen.")
+    print(f"\n[1/4] Berhasil memuat {len(documents)} dokumen dari {DATA_DIR}")
 
-    # Potong menjadi chunks
-    splitter = SentenceSplitter(chunk_size=1024, chunk_overlap=200)
+    # Tahap 2: Memotong menjadi chunks
+    splitter = SentenceSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
+    )
     nodes = splitter.get_nodes_from_documents(documents)
-    print(f"Terbentuk {len(nodes)} chunks.")
+    print(f"[2/4] Terbentuk {len(nodes)} chunks "
+          f"(chunk_size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP})")
 
-    # Hubungkan ke ChromaDB
+    # Tahap 3 & 4: Embedding dan menyimpan ke ChromaDB
+    print(f"[3/4] Mengonversi chunks menjadi vektor embedding...")
+    print(f"      Model: models/embedding-001")
+    print(f"      Database: ChromaDB (path={CHROMA_DB_PATH})")
+
     chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
-    chroma_collection = chroma_client.get_or_create_collection("polban_rules")
+
+    # Hapus koleksi lama lebih dulu agar pengindeksan ulang tidak menumpuk
+    # duplikat. Dengan ini indexer aman dijalankan berkali-kali
+    # (idempoten / selalu mulai dari kondisi bersih).
+    try:
+        chroma_client.delete_collection(COLLECTION_NAME)
+        print(f"      Koleksi lama '{COLLECTION_NAME}' dihapus, mengindeks ulang dari awal.")
+    except Exception:
+        pass
+
+    chroma_collection = chroma_client.get_or_create_collection(COLLECTION_NAME)
     vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
-    # Buat dan simpan indeks
     index = VectorStoreIndex(nodes, storage_context=storage_context)
-    print("Knowledge base berhasil diindeks ke ChromaDB.")
+
+    # Konfirmasi
+    count = chroma_collection.count()
+    print(f"[4/4] Knowledge base berhasil diindeks!")
+    print(f"      Total vektor tersimpan: {count}")
+    print("=" * 60)
 
 
+# ---------------------------------------------------------------------------
+# Entry Point
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
     build_knowledge_base()

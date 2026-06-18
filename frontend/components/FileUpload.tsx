@@ -1,49 +1,92 @@
 "use client";
 
-interface FileUploadProps {
-  onFileSelect: (file: File) => void;
-  selectedFile: File | null;
+import { useCallback, useRef, useState, type DragEvent } from "react";
+import { cn } from "@/lib/utils";
+
+const ALLOWED = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
+const MAX_MB = 20;
+
+interface Props {
+  file: File | null;
+  onSelect: (file: File | null) => void;
 }
 
-export default function FileUpload({ onFileSelect, selectedFile }: FileUploadProps) {
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) onFileSelect(file);
-  };
+export function FileUpload({ file, onSelect }: Props) {
+  const [dragging, setDragging] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) onFileSelect(file);
-  };
+  const validate = useCallback((f: File): boolean => {
+    if (!ALLOWED.includes(f.type)) {
+      setError("Format tidak didukung (gunakan JPG, PNG, WEBP, atau PDF).");
+      return false;
+    }
+    if (f.size > MAX_MB * 1024 * 1024) {
+      setError(`Ukuran berkas melebihi ${MAX_MB}MB.`);
+      return false;
+    }
+    setError(null);
+    return true;
+  }, []);
+
+  const handleFiles = useCallback(
+    (files: FileList | null) => {
+      if (!files || files.length === 0) return;
+      const f = files[0];
+      if (validate(f)) onSelect(f);
+    },
+    [validate, onSelect],
+  );
+
+  function onDrop(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setDragging(false);
+    handleFiles(e.dataTransfer.files);
+  }
+
+  function onDragOver(e: DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setDragging(true);
+  }
 
   return (
-    <div
-      onDrop={handleDrop}
-      onDragOver={(e) => e.preventDefault()}
-      className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors"
-    >
-      <input
-        type="file"
-        accept=".jpg,.jpeg,.png,.pdf,.webp"
-        onChange={handleChange}
-        className="hidden"
-        id="file-input"
-      />
-      <label htmlFor="file-input" className="cursor-pointer">
-        {selectedFile ? (
-          <div>
-            <p className="text-green-600 font-medium">{selectedFile.name}</p>
-            <p className="text-sm text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
-          </div>
-        ) : (
-          <div>
-            <p className="text-gray-600">Seret & lepaskan berkas di sini</p>
-            <p className="text-sm text-gray-400 mt-1">atau klik untuk memilih</p>
-            <p className="text-xs text-gray-400 mt-3">Format: JPG, PNG, PDF, WEBP (maks. 20MB)</p>
-          </div>
+    <div>
+      <div
+        onClick={() => inputRef.current?.click()}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        onDragLeave={() => setDragging(false)}
+        className={cn(
+          "flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition",
+          dragging
+            ? "border-indigo-500 bg-indigo-50"
+            : "border-slate-300 bg-slate-50 hover:border-indigo-400",
         )}
-      </label>
+      >
+        <p className="text-sm font-medium text-slate-700">
+          {file ? file.name : "Klik atau seret berkas ke sini"}
+        </p>
+        <p className="mt-1 text-xs text-slate-500">
+          JPG, PNG, WEBP, atau PDF \u00b7 maks {MAX_MB}MB
+        </p>
+        <input
+          ref={inputRef}
+          type="file"
+          accept={ALLOWED.join(",")}
+          className="hidden"
+          onChange={(e) => handleFiles(e.target.files)}
+        />
+      </div>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {file && (
+        <button
+          type="button"
+          onClick={() => onSelect(null)}
+          className="mt-2 text-xs text-slate-500 transition hover:text-red-600"
+        >
+          Hapus berkas
+        </button>
+      )}
     </div>
   );
 }

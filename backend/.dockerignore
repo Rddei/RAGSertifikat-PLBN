@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Secret & data lokal (jangan masuk image)
+.env
+*.db
+chroma_db/
+uploads/
+data/
+
+# Git & artefak
+.git/
+.gitignore
+*.zip
+
+# Dokumentasi (tidak diperlukan saat runtime)
+README.md
+DEPLOYMENT.md
