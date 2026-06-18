@@ -1,4 +1,3 @@
-# knowledge_base/indexer.py
 import os
 import chromadb
 from llama_index.core import SimpleDirectoryReader, Settings, VectorStoreIndex, StorageContext
@@ -13,6 +12,7 @@ Settings.embed_model = embed_model
 
 # Tentukan direktori sumber dokumen (folder data/)
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+
 
 def build_knowledge_base():
     if not os.path.exists(DATA_DIR) or not os.listdir(DATA_DIR):
@@ -37,6 +37,7 @@ def build_knowledge_base():
     # Buat dan simpan indeks
     index = VectorStoreIndex(nodes, storage_context=storage_context)
     print("Knowledge base berhasil diindeks ke ChromaDB.")
+
 
 if __name__ == "__main__":
     build_knowledge_base()

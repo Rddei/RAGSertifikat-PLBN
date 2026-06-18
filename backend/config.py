@@ -3,10 +3,29 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-if not GOOGLE_API_KEY:
-    raise EnvironmentError("GOOGLE_API_KEY must be set in .env")
 
+def _require(name: str) -> str:
+    """Ambil env var wajib; error jelas bila belum di-set."""
+    value = os.getenv(name)
+    if not value:
+        raise EnvironmentError(f"{name} wajib di-set di .env")
+    return value
+
+
+# --- Wajib ---
+GOOGLE_API_KEY = _require("GOOGLE_API_KEY")
+SECRET_KEY = _require("SECRET_KEY")            # kunci untuk menandatangani JWT
+ADMIN_PASSWORD = _require("ADMIN_PASSWORD")    # password admin awal (akan di-hash)
+
+# --- Opsional (punya default) ---
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db")
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./compliance.db")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")  # set "production" saat deploy
+
+# Daftar origin frontend yang boleh mengakses API (dipisah koma)
+_cors_raw = os.getenv("CORS_ORIGINS", "http://localhost:3000")
+CORS_ORIGINS = [o.strip() for o in _cors_raw.split(",") if o.strip()]
+
+IS_PRODUCTION = ENVIRONMENT.lower() == "production"

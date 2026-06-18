@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: .
+    container_name: polban-compliance-api
+    ports:
+      - "8000:8000"
+    # Variabel rahasia diambil dari file .env (GOOGLE_API_KEY, SECRET_KEY, dll.)
+    env_file:
+      - .env
+    # Override path agar semua data tersimpan di satu volume persisten
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/compliance.db
+      - CHROMA_DB_PATH=/app/data/chroma_db
+      - UPLOAD_DIR=/app/data/uploads
+      - ENVIRONMENT=production
+    volumes:
+      - app_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  app_data:
