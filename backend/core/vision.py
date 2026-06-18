@@ -5,6 +5,7 @@ from google import genai as google_genai
 from google.genai import types as genai_types
 
 from config import GOOGLE_API_KEY
+from core.genai_utils import call_with_retry
 
 logger = logging.getLogger("compliance.vision")
 vision_client = google_genai.Client(api_key=GOOGLE_API_KEY)
@@ -30,11 +31,14 @@ def _parse_json(text: str) -> dict:
 
 async def extract_certificate_data(image_bytes: bytes, mime_type: str) -> dict:
     image_part = genai_types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
-    response = await vision_client.aio.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=[_PROMPT, image_part],
-        # Paksa keluaran berupa JSON -> mengurangi parsing yang rapuh.
-        config=genai_types.GenerateContentConfig(response_mime_type="application/json"),
+    response = await call_with_retry(
+        lambda: vision_client.aio.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=[_PROMPT, image_part],
+            # Paksa keluaran berupa JSON -> mengurangi parsing yang rapuh.
+            config=genai_types.GenerateContentConfig(response_mime_type="application/json"),
+        ),
+        what="Ekstraksi data sertifikat (Gemini Vision)",
     )
     try:
         return _parse_json(response.text)

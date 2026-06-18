@@ -24,7 +24,7 @@ async def process_single_application(
     logger.info("Memproses %s (jurusan=%s)", filename, target_major)
 
     # Stage 0: Fraud detection
-    fraud_flags, qr_data = scan_for_fraud(image_bytes)
+    fraud_flags, qr_data = scan_for_fraud(image_bytes, content_type)
     # Stage 1: Extraction
     extracted = await extract_certificate_data(image_bytes, content_type)
     # Stage 2: RAG

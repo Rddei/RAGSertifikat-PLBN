@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models.database import get_db
 from services.compliance_service import ComplianceService
+from core.genai_utils import ModelUnavailableError
 from dependencies import get_current_admin
 
 router = APIRouter()
@@ -60,6 +61,9 @@ async def process_document(
             expected_name=expected_name,
             db=db,
         )
+    except ModelUnavailableError as e:
+        logger.warning("Model AI sedang sibuk: %s", e)
+        raise HTTPException(status_code=503, detail=str(e)) from e
     except ValueError as e:
         logger.error("AI pipeline error: %s", e)
         raise HTTPException(status_code=422, detail=str(e)) from e

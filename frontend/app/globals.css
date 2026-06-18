@@ -1,7 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 (default create-next-app terbaru) */
+@import "tailwindcss";
+
+/*
+  Jika proyek Anda memakai Tailwind v3, GANTI baris @import di atas dengan:
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  CATATAN: blok @theme di bawah HANYA berlaku untuk Tailwind v4.
+  Untuk v3, definisikan warna brand di tailwind.config.js (theme.extend.colors).
+*/
+
+/* === Tema POLBAN ===
+   Kita mendefinisikan skala warna "brand" (biru navy POLBAN) dan sekaligus
+   meng-override skala "indigo" ke nilai yang sama, sehingga komponen yang
+   sudah memakai kelas indigo-* otomatis ikut bertema POLBAN. */
+@theme {
+  --color-brand-50: #eef2fb;
+  --color-brand-100: #d7e0f3;
+  --color-brand-200: #b3c4e6;
+  --color-brand-300: #8aa3d6;
+  --color-brand-400: #5577bd;
+  --color-brand-500: #2f56ab;
+  --color-brand-600: #1e3f8f;
+  --color-brand-700: #16306e;
+  --color-brand-800: #112553;
+  --color-brand-900: #0d1d40;
+
+  --color-indigo-50: #eef2fb;
+  --color-indigo-100: #d7e0f3;
+  --color-indigo-400: #5577bd;
+  --color-indigo-500: #2f56ab;
+  --color-indigo-600: #1e3f8f;
+  --color-indigo-700: #16306e;
+}
+
+html {
+  scroll-behavior: smooth;
+}
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }

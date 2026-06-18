@@ -1,3 +1,4 @@
+from core.genai_utils import call_with_retry
 from repositories.chromadb_repo import get_query_engine
 
 
@@ -8,5 +9,8 @@ async def retrieve_rules(extracted: dict, target_major: str) -> str:
         f"dan lomba {extracted.get('nama_lomba', '')} "
         f"untuk jurusan {target_major}"
     )
-    result = await query_engine.aquery(query)
+    result = await call_with_retry(
+        lambda: query_engine.aquery(query),
+        what="Retrieval aturan (RAG/Gemini)",
+    )
     return result.response
