@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+// Jika Anda menggunakan next/link atau next/router untuk navigasi admin
+import { useRouter } from "next/navigation"; 
 import { Navbar } from "@/components/Navbar";
 import { MetricsCards } from "@/components/MetricsCards";
 import { ApplicantsTable } from "@/components/ApplicantsTable";
@@ -13,8 +15,10 @@ import { useRequireAuth } from "@/lib/useRequireAuth";
 import type { Applicant, Metrics } from "@/lib/types";
 
 export default function DashboardPage() {
-  const { ready, isAuthenticated } = useRequireAuth();
+  const { ready, isAuthenticated, user } = useRequireAuth(); 
+  const router = useRouter();
   const toast = useToast();
+  
   const [applicants, setApplicants] = useState<Applicant[]>([]);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,11 +35,15 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+    // PERBAIKAN 1: Kosongkan dependency array agar tidak terjadi infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (ready && isAuthenticated) load();
-  }, [ready, isAuthenticated, load]);
+    // PERBAIKAN 2: Hapus 'load' dari dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, isAuthenticated]);
 
   async function handleExport() {
     setExporting(true);
@@ -63,9 +71,21 @@ export default function DashboardPage() {
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-8">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <Button variant="secondary" loading={exporting} onClick={handleExport}>
-            Export CSV
-          </Button>
+          <div className="space-x-3">
+             {/* PROTEKSI UI: Tombol KB Editor HANYA untuk Admin */}
+             {user?.role === "admin" && (
+              <Button variant="outline" onClick={() => router.push("/kb-editor")}>
+                Kelola Aturan (KB)
+              </Button>
+            )}
+            
+            {/* PROTEKSI UI: Tombol Export HANYA untuk Admin */}
+            {user?.role === "admin" && (
+              <Button variant="secondary" loading={exporting} onClick={handleExport}>
+                Export CSV
+              </Button>
+            )}
+          </div>
         </div>
 
         {loading || !metrics ? (

@@ -14,6 +14,7 @@ def _utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+# Engine asinkron (akan menggunakan driver asyncpg dari DATABASE_URL di .env)
 async_engine = create_async_engine(DATABASE_URL, echo=False)
 AsyncSessionLocal = async_sessionmaker(async_engine, expire_on_commit=False)
 
@@ -27,12 +28,18 @@ async def get_db():
         yield session
 
 
-class Admin(Base):
-    __tablename__ = "admins"
+class User(Base):
+    """
+    Tabel pengguna terpusat untuk otentikasi.
+    Menggantikan tabel Admin sebelumnya untuk mendukung multi-role.
+    """
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     # Menyimpan HASH bcrypt, BUKAN plaintext.
     password = Column(String, nullable=False)
+    # Role RBAC: 'admin' atau 'verifikator'
+    role = Column(String, default="verifikator", nullable=False)
 
 
 class BatchJob(Base):
@@ -42,6 +49,7 @@ class BatchJob(Base):
     processed_files = Column(Integer, default=0)
     status = Column(String, default="processing")
     created_at = Column(DateTime(timezone=True), default=_utcnow)
+    
     applicants = relationship("Applicant", back_populates="batch")
 
 
@@ -49,6 +57,10 @@ class Applicant(Base):
     __tablename__ = "applicants"
     id = Column(Integer, primary_key=True)
     batch_id = Column(Integer, ForeignKey("batch_jobs.id"), nullable=True)
+    
+    # Kolom untuk mengikat dokumen ke verifikator tertentu
+    verifikator_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    
     filename = Column(String, nullable=False)
     applicant_name = Column(String)
     target_major = Column(String)
@@ -59,4 +71,7 @@ class Applicant(Base):
     final_status = Column(String)
     reasoning = Column(Text)
     created_at = Column(DateTime(timezone=True), default=_utcnow, index=True)
+    
+    # Relasi
     batch = relationship("BatchJob", back_populates="applicants")
+    verifikator = relationship("User", foreign_keys=[verifikator_id])

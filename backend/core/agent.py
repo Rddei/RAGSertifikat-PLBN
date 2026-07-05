@@ -20,15 +20,19 @@ async def process_single_application(
     expected_name: str,
     db: AsyncSession,
     batch_id: int | None = None,
+    verifikator_id: int | None = None,  # <-- PARAMETER BARU DITAMBAHKAN
 ) -> dict:
     logger.info("Memproses %s (jurusan=%s)", filename, target_major)
 
     # Stage 0: Fraud detection
     fraud_flags, qr_data = scan_for_fraud(image_bytes, content_type)
+    
     # Stage 1: Extraction
     extracted = await extract_certificate_data(image_bytes, content_type)
+    
     # Stage 2: RAG
     rag_context = await retrieve_rules(extracted, target_major)
+    
     # Stage 3: Audit
     audit = await run_audit(
         extracted, target_major, expected_name, fraud_flags, qr_data, rag_context
@@ -37,6 +41,7 @@ async def process_single_application(
     # Stage 4: Persist (dengan rollback bila gagal)
     applicant = Applicant(
         batch_id=batch_id,
+        verifikator_id=verifikator_id,  # <-- DISIMPAN KE DATABASE DI SINI
         filename=filename,
         applicant_name=expected_name,
         target_major=target_major,
@@ -47,6 +52,7 @@ async def process_single_application(
         final_status=audit.get("status", "Unknown"),
         reasoning=audit.get("reasoning", ""),
     )
+    
     db.add(applicant)
     try:
         await db.commit()

@@ -12,8 +12,10 @@ vision_client = google_genai.Client(api_key=GOOGLE_API_KEY)
 
 _PROMPT = """
 Anda adalah asisten ekstraksi data. Perhatikan gambar sertifikat ini.
-Ekstrak data dengan kunci JSON: nama_peserta, jenjang_sekolah, nama_lomba,
-nama_penyelenggara. Jika sebuah nilai tidak ditemukan, isi dengan string kosong.
+Ekstrak data dengan kunci JSON: nama_peserta, nisn, asal_sekolah, jenjang_sekolah,
+nama_lomba, nama_penyelenggara. Jika sebuah nilai tidak ditemukan, isi dengan string
+kosong. Khusus "nisn": tuliskan hanya digit (Nomor Induk Siswa Nasional, biasanya 10
+digit) bila tercetak pada sertifikat; "asal_sekolah": nama sekolah/instansi peserta.
 Jangan berikan teks tambahan atau markdown.
 """
 

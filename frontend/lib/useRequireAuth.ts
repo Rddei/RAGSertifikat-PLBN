@@ -1,19 +1,17 @@
-"use client";
-
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./auth";
 
-// Guard sisi-klien: arahkan ke /login bila belum terautentikasi.
 export function useRequireAuth() {
-  const { isAuthenticated, ready } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (ready && !isAuthenticated) {
-      router.replace("/login");
+    if (auth.ready && !auth.isAuthenticated) {
+      router.push("/login");
     }
-  }, [ready, isAuthenticated, router]);
+  }, [auth.ready, auth.isAuthenticated, router]);
 
-  return { ready, isAuthenticated };
+  // Pastikan me-return seluruh isi auth (termasuk .user)
+  return auth; 
 }

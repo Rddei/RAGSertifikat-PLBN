@@ -9,9 +9,9 @@ from sqlalchemy.future import select
 from config import (
     CORS_ORIGINS, IS_PRODUCTION, ADMIN_USERNAME, ADMIN_PASSWORD,
 )
-from models.database import async_engine, AsyncSessionLocal, Base, Admin
+from models.database import async_engine, AsyncSessionLocal, Base, User
 from security import hash_password
-from api.routes import auth, documents, batch, applicants
+from api.routes import auth, documents, batch, applicants, knowledge
 
 logging.basicConfig(
     level=logging.INFO,
@@ -19,25 +19,47 @@ logging.basicConfig(
 )
 logger = logging.getLogger("compliance.main")
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Buat tabel jika belum ada
+    # Buat tabel jika belum ada di PostgreSQL
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    # Seed admin default dengan password TER-HASH (aman)
+    # Seed admin dan verifikator default
     async with AsyncSessionLocal() as db:
-        existing = await db.execute(
-            select(Admin).where(Admin.username == ADMIN_USERNAME)
+        # 1. SEED ADMIN
+        existing_admin = await db.execute(
+            select(User).where(User.username == ADMIN_USERNAME)
         )
-        if existing.scalar_one_or_none() is None:
-            db.add(Admin(username=ADMIN_USERNAME, password=hash_password(ADMIN_PASSWORD)))
-            await db.commit()
-            logger.info("Admin default dibuat (username=%s)", ADMIN_USERNAME)
+        if existing_admin.scalar_one_or_none() is None:
+            db.add(User(
+                username=ADMIN_USERNAME, 
+                password=hash_password(ADMIN_PASSWORD),
+                role="admin"
+            ))
+            logger.info("Admin default dibuat (username=%s, role=admin)", ADMIN_USERNAME)
+
+        # 2. SEED VERIFIKATOR DEFAULT (Untuk Testing & MVP)
+        # Anda bisa mengubah username dan password ini sesuai keinginan
+        verif_username = "verifikator1"
+        verif_password = "password123"
+        
+        existing_verif = await db.execute(
+            select(User).where(User.username == verif_username)
+        )
+        if existing_verif.scalar_one_or_none() is None:
+            db.add(User(
+                username=verif_username,
+                password=hash_password(verif_password),
+                role="verifikator"
+            ))
+            logger.info("Verifikator default dibuat (username=%s, role=verifikator)", verif_username)
+
+        # Simpan keduanya ke database
+        await db.commit()
+        
     yield
     await async_engine.dispose()
-
 
 app = FastAPI(
     title="POLBAN Intelligent Compliance Engine",
@@ -49,17 +71,18 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,        # spesifik, bukan "*"
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Registrasi semua router
 app.include_router(auth.router)
 app.include_router(documents.router)
 app.include_router(batch.router)
 app.include_router(applicants.router)
-
+app.include_router(knowledge.router) # Router fitur Knowledge Base
 
 @app.get("/health")
 async def health():
@@ -71,7 +94,6 @@ async def health():
     except Exception as e:
         logger.exception("Health check gagal")
         return {"status": "degraded", "database": "error", "detail": str(e)}
-
 
 @app.get("/")
 async def root():

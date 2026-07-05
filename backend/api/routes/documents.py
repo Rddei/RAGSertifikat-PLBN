@@ -1,34 +1,61 @@
 import logging
 
-from fastapi import APIRouter, File, Form, UploadFile, Depends, HTTPException
+from fastapi import APIRouter, File, Form, UploadFile, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models.database import get_db
+# Gunakan AsyncSessionLocal untuk Background Tasks
+from models.database import AsyncSessionLocal, User
 from services.compliance_service import ComplianceService
 from core.genai_utils import ModelUnavailableError
-from dependencies import get_current_admin
+from dependencies import get_current_user
 
 router = APIRouter()
 logger = logging.getLogger("compliance.documents")
 
-# Format file yang diizinkan
 ALLOWED_MIME_TYPES = {
     "image/jpeg",
     "image/png",
     "application/pdf",
     "image/webp",
 }
-MAX_FILE_SIZE_MB = 20
+# Batas ukuran diturunkan untuk stabilitas produksi (100+ users)
+MAX_FILE_SIZE_MB = 5 
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
+async def process_document_in_background(
+    image_bytes: bytes,
+    filename: str,
+    content_type: str,
+    target_major: str,
+    expected_name: str,
+    verifikator_id: int, 
+):
+    """
+    Berjalan di latar belakang dengan koneksi basis data mandiri.
+    """
+    logger.info("Memulai pemrosesan latar belakang untuk file: %s oleh verifikator: %d", filename, verifikator_id)
+    async with AsyncSessionLocal() as db_session:
+        try:
+            await ComplianceService.verify_document(
+                image_bytes=image_bytes,
+                filename=filename,
+                content_type=content_type,
+                target_major=target_major,
+                expected_name=expected_name,
+                db=db_session,
+                verifikator_id=verifikator_id
+            )
+            logger.info("Pemrosesan sukses untuk: %s", filename)
+        except Exception as e:
+            logger.exception("Gagal memproses file %s di latar belakang", filename)
 
-@router.post("/process-document")
+@router.post("/process-document", status_code=202)
 async def process_document(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     expected_name: str = Form(..., min_length=2),
     jurusan_tujuan: str = Form(..., min_length=2),
-    db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),  # endpoint dilindungi login
+    current_user: User = Depends(get_current_user), 
 ):
     # --- Validasi format file ---
     if file.content_type not in ALLOWED_MIME_TYPES:
@@ -51,25 +78,20 @@ async def process_document(
             detail=f"Ukuran file melebihi batas maksimum {MAX_FILE_SIZE_MB}MB",
         )
 
-    # --- Jalankan pipeline ---
-    try:
-        return await ComplianceService.verify_document(
-            image_bytes=image_bytes,
-            filename=file.filename,
-            content_type=file.content_type,
-            target_major=jurusan_tujuan,
-            expected_name=expected_name,
-            db=db,
-        )
-    except ModelUnavailableError as e:
-        logger.warning("Model AI sedang sibuk: %s", e)
-        raise HTTPException(status_code=503, detail=str(e)) from e
-    except ValueError as e:
-        logger.error("AI pipeline error: %s", e)
-        raise HTTPException(status_code=422, detail=str(e)) from e
-    except Exception as e:
-        logger.exception("Unexpected error in pipeline")
-        raise HTTPException(
-            status_code=500,
-            detail="Terjadi kesalahan internal saat memproses dokumen",
-        ) from e
+    # --- Delegasikan ke latar belakang agar API tidak timeout ---
+    background_tasks.add_task(
+        process_document_in_background,
+        image_bytes=image_bytes,
+        filename=file.filename,
+        content_type=file.content_type,
+        target_major=jurusan_tujuan,
+        expected_name=expected_name,
+        verifikator_id=current_user.id
+    )
+
+    # Respons seketika ke Next.js
+    return {
+        "status": "processing",
+        "message": f"Dokumen {file.filename} diterima dan sedang diproses di latar belakang.",
+        "filename": file.filename
+    }

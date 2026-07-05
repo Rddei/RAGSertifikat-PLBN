@@ -136,4 +136,26 @@ export const api = {
   async health(): Promise<{ status: string }> {
     return request<{ status: string }>("/health");
   },
+
+  // ==========================================
+  // FITUR KNOWLEDGE BASE (KB) UNTUK ADMIN
+  // ==========================================
+  
+  async getKbContent(): Promise<{ status: string; content: string }> {
+    return request<{ status: string; content: string }>("/api/kb/content");
+  },
+
+  async updateKbContent(content: string): Promise<{ status: string; message: string }> {
+    return request<{ status: string; message: string }>("/api/kb/content", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content }),
+    });
+  },
+
+  async syncKb(): Promise<{ status: string; message: string }> {
+    return request<{ status: string; message: string }>("/api/kb/ingest", {
+      method: "POST",
+    });
+  },
 };

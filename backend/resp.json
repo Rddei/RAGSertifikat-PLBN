@@ -1,0 +1,21 @@
+{
+  "status": true,
+  "statusCode": "OK",
+  "message": "Data ditemukan",
+  "result": {
+    "data_sekolah": [],
+    "data_siswa": [
+      {
+        "id": "gzRmvuUU4s1wGQpCGYSMLg",
+        "uuid_user": "886a1b1c-b0d8-419b-be34-5b1225da89ee",
+        "name": "GANDI LUBIS"
+      },
+      {
+        "id": "nZrl5xcs8QZB1GxdVwcvsw",
+        "uuid_user": "d3478b27-9f48-43ca-9df9-4a2063bf0875",
+        "name": "KEANU GANDI LUBIS"
+      }
+    ],
+    "data_dudi": []
+  }
+}

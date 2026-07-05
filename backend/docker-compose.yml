@@ -1,21 +1,38 @@
+version: '3.8'
+
 services:
+  db:
+    image: postgres:15-alpine
+    container_name: polban-postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: compliance_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
   backend:
     build: .
     container_name: polban-compliance-api
     ports:
       - "8000:8000"
-    # Variabel rahasia diambil dari file .env (GOOGLE_API_KEY, SECRET_KEY, dll.)
     env_file:
       - .env
-    # Override path agar semua data tersimpan di satu volume persisten
     environment:
-      - DATABASE_URL=sqlite+aiosqlite:////app/data/compliance.db
+      # Arahkan ke service 'db' di atas
+      - DATABASE_URL=postgresql+asyncpg://admin:secretpassword@db:5432/compliance_db
       - CHROMA_DB_PATH=/app/data/chroma_db
       - UPLOAD_DIR=/app/data/uploads
       - ENVIRONMENT=production
     volumes:
       - app_data:/app/data
+    depends_on:
+      - db
     restart: unless-stopped
 
 volumes:
   app_data:
+  pg_data:

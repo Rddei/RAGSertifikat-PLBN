@@ -5,10 +5,12 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from models.database import Applicant, get_db
+# Import User juga untuk typing
+from models.database import Applicant, get_db, User
 from models.schemas import StatusLiteral
 from export import generate_csv_export
-from dependencies import get_current_admin
+# Ganti import menjadi get_current_user
+from dependencies import get_current_user
 
 router = APIRouter()
 
@@ -28,23 +30,36 @@ def _to_dict(a: Applicant) -> dict:
         "qr_data": json.loads(a.qr_data) if a.qr_data else [],
         "reasoning": a.reasoning,
         "created_at": a.created_at.isoformat() if a.created_at else None,
+        "verifikator_id": a.verifikator_id, # Tambahkan agar Frontend tahu ini milik siapa
     }
 
 
 @router.get("/api/applicants")
 async def list_applicants(
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    current_user: User = Depends(get_current_user), # Injeksi User yang sedang login
 ):
-    result = await db.execute(select(Applicant).order_by(Applicant.id.desc()))
+    # LOGIKA RBAC: Filter Isolasi Data
+    if current_user.role == "admin":
+        # Admin bisa melihat semua data
+        query = select(Applicant).order_by(Applicant.id.desc())
+    else:
+        # Verifikator HANYA bisa melihat datanya sendiri
+        query = select(Applicant).where(Applicant.verifikator_id == current_user.id).order_by(Applicant.id.desc())
+
+    result = await db.execute(query)
     return {"data": [_to_dict(a) for a in result.scalars().all()]}
 
 
 @router.get("/api/applicants/export")
 async def export_csv(
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    current_user: User = Depends(get_current_user),
 ):
+    # Proteksi: Fitur Export CSV biasanya HANYA untuk Admin
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Hanya Admin yang diizinkan mengunduh laporan.")
+
     csv_buffer = await generate_csv_export(db)
     # \ufeff (BOM) agar Microsoft Excel membaca UTF-8 dengan benar.
     content = "\ufeff" + csv_buffer.getvalue()
@@ -58,9 +73,15 @@ async def export_csv(
 @router.get("/api/applicants/metrics")
 async def get_metrics(
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    current_user: User = Depends(get_current_user),
 ):
-    result = await db.execute(select(Applicant))
+    # LOGIKA RBAC untuk Metrik
+    if current_user.role == "admin":
+        query = select(Applicant)
+    else:
+        query = select(Applicant).where(Applicant.verifikator_id == current_user.id)
+
+    result = await db.execute(query)
     applicants = result.scalars().all()
 
     def has_fraud(a: Applicant) -> bool:
@@ -80,15 +101,27 @@ async def get_metrics(
 @router.post("/api/applicants/{applicant_id}/override")
 async def override_status(
     applicant_id: int,
-    status: StatusLiteral = Form(...),  # hanya menerima status yang valid
+    status: StatusLiteral = Form(...),
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    current_user: User = Depends(get_current_user),
 ):
-    result = await db.execute(select(Applicant).where(Applicant.id == applicant_id))
+    # Cek hak akses ke dokumen ini
+    if current_user.role == "admin":
+        query = select(Applicant).where(Applicant.id == applicant_id)
+    else:
+        query = select(Applicant).where(
+            Applicant.id == applicant_id, 
+            Applicant.verifikator_id == current_user.id
+        )
+        
+    result = await db.execute(query)
     applicant = result.scalar_one_or_none()
+    
     if not applicant:
-        raise HTTPException(404, "Applicant not found")
+        raise HTTPException(status_code=404, detail="Dokumen tidak ditemukan atau Anda tidak memiliki akses.")
+        
     applicant.final_status = status
     await db.commit()
     await db.refresh(applicant)
+    
     return {"applicant_id": applicant.id, "final_status": applicant.final_status}

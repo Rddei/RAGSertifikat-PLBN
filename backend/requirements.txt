@@ -22,8 +22,13 @@ llama-index-llms-google-genai
 llama-index-embeddings-google-genai
 llama-index-vector-stores-chroma
 chromadb
-
+asyncpg>=0.28.0
+gunicorn>=21.2.0
 # --- Pemrosesan gambar & fraud detection ---
 Pillow
 pyzbar                  # butuh paket sistem: libzbar0 / zbar
 pymupdf                 # render halaman PDF -> gambar untuk fraud scan (opsional)
+
+# --- Scraping SIMT PUSPRESNAS (cek legalitas penyelenggara) ---
+httpx                   # HTTP client async untuk mengambil halaman SIMT
+beautifulsoup4          # parsing HTML hasil scraping

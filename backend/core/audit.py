@@ -5,6 +5,8 @@ from llama_index.llms.google_genai import GoogleGenAI
 
 from config import GOOGLE_API_KEY
 from core.genai_utils import call_with_retry
+from services.puspresnas import format_for_audit
+from services.portfolio import format_for_audit_portfolio
 
 logger = logging.getLogger("compliance.audit")
 llm = GoogleGenAI(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY)
@@ -23,7 +25,7 @@ _REASONING_FORMAT = (
     "- Tulis sebagai daftar bernomor markdown, satu nomor per kriteria.\n"
     "- Setiap poin: '<nomor>. **<Label Kriteria>:** <penjelasan>'.\n"
     "- Gunakan label baku: 'Pencocokan Nama', 'Anti-Kecurangan', 'Relevansi Prestasi', "
-    "dan 'Kesesuaian Jurusan' (bila relevan).\n"
+    "dan 'Kesesuaian Jurusan'.\n"
     "- Untuk setiap kriteria, nyatakan eksplisit 'terpenuhi' atau 'tidak terpenuhi'.\n"
     "- Akhiri dengan satu baris '**Kesimpulan:** <ringkasan keputusan>'.\n"
     "- JANGAN menulis 'reasoning' sebagai satu paragraf tanpa nomor."
@@ -51,9 +53,19 @@ def _extract_json(text: str) -> dict:
 
 
 async def run_audit(extracted: dict, target_major: str, expected_name: str,
-                    fraud_flags: list, qr_data: list, rag_context: str) -> dict:
+                    fraud_flags: list, qr_data: list, rag_context: str,
+                    puspresnas: dict | None = None,
+                    portfolio: dict | None = None) -> dict:
     fraud_summary = fraud_flags if fraud_flags else "Bersih"
     qr_summary = qr_data if qr_data else "Tidak ditemukan"
+    puspresnas_summary = (
+        format_for_audit(puspresnas) if puspresnas
+        else "Pengecekan PUSPRESNAS tidak dijalankan."
+    )
+    portfolio_summary = (
+        format_for_audit_portfolio(portfolio) if portfolio
+        else "Pengecekan portofolio prestasi tidak dijalankan."
+    )
     prompt = f"""
 Anda adalah Auditor Admisi POLBAN Berbasis AI.
 Tugas Anda: Berikan penilaian kelayakan berdasarkan data berikut.
@@ -71,6 +83,11 @@ ANTI-KECURANGAN:
 - Flags: {fraud_summary}
 - QR/Barcode: {qr_summary}
 (Jika Flags menunjukkan indikasi editan, WAJIB Ditolak skor 0)
+
+INFORMASI EKSTERNAL SIMT PUSPRESNAS (HANYA FLAG/CATATAN - JANGAN dijadikan dasar skor):
+- Legalitas penyelenggara: {puspresnas_summary}
+- Keaslian sertifikat (portofolio): {portfolio_summary}
+CATATAN PENTING: Kedua poin di atas adalah PENANDA INFORMATIF untuk verifikator manusia. JANGAN menaikkan atau menurunkan skor_kepatuhan berdasarkan keduanya, dan JANGAN memasukkannya sebagai kriteria bernomor pada 'reasoning'. Skor & status hanya ditentukan oleh: pencocokan nama, anti-kecurangan, relevansi prestasi, dan kesesuaian jurusan.
 
 KONTEKS ATURAN (RAG):
 {rag_context}

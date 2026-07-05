@@ -11,7 +11,7 @@ from sqlalchemy.future import select
 from config import UPLOAD_DIR
 from models.database import get_db, BatchJob, Applicant
 from core.agent import process_single_application
-from dependencies import get_current_admin
+from dependencies import get_current_user
 
 router = APIRouter()
 logger = logging.getLogger("compliance.batch")
@@ -53,7 +53,7 @@ async def process_batch(
     expected_names: list[str] = Form(...),
     jurusan_tujuan: str = Form(...),
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    _admin: str = Depends(get_current_user),
 ):
     new_batch = BatchJob(total_files=len(files), processed_files=0, status="processing")
     db.add(new_batch)
@@ -87,7 +87,7 @@ async def process_batch(
 async def get_batch_status(
     batch_id: int,
     db: AsyncSession = Depends(get_db),
-    _admin: str = Depends(get_current_admin),
+    _admin: str = Depends(get_current_user),
 ):
     result = await db.execute(select(BatchJob).where(BatchJob.id == batch_id))
     job = result.scalar_one_or_none()

@@ -1,12 +1,9 @@
 import logging
-from typing import Any
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.agent import process_single_application
 
 logger = logging.getLogger("compliance.service")
-
 
 class ComplianceService:
     @staticmethod
@@ -17,13 +14,17 @@ class ComplianceService:
         target_major: str,
         expected_name: str,
         db: AsyncSession,
-        batch_id: int | None = None,
-    ) -> dict[str, Any]:
-        """Menjalankan pipeline penuh dan mengembalikan hasil."""
-        logger.info(
-            "Mulai verifikasi dokumen: %s (jurusan=%s)", filename, target_major
-        )
-        return await process_single_application(
+        verifikator_id: int = None,
+        batch_id: int = None,
+    ) -> dict:
+        """
+        Layanan utama untuk menjembatani rute dokumen dengan core agent.
+        """
+        logger.info("ComplianceService menerima dokumen: %s", filename)
+        
+        # Panggil agen AI untuk memproses ekstraksi, RAG, dan Audit
+        # dan meneruskan verifikator_id untuk disimpan ke database
+        result = await process_single_application(
             image_bytes=image_bytes,
             filename=filename,
             content_type=content_type,
@@ -31,4 +32,7 @@ class ComplianceService:
             expected_name=expected_name,
             db=db,
             batch_id=batch_id,
+            verifikator_id=verifikator_id
         )
+        
+        return result
