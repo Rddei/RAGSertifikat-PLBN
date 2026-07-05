@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { StatusBadge } from "@/components/StatusBadge";
+import { SimtFlags } from "@/components/SimtFlags";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
 import { cn, formatDate, scoreColor } from "@/lib/utils";
@@ -49,6 +50,7 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
             <th className="px-3 py-2">Skor</th>
             <th className="px-3 py-2">Status AI</th>
             <th className="px-3 py-2">Status Final</th>
+            <th className="px-3 py-2">SIMT</th>
             <th className="px-3 py-2">Tanggal</th>
             <th className="px-3 py-2">Ubah Status</th>
             <th className="px-3 py-2">Detail</th>
@@ -67,6 +69,9 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
               </td>
               <td className="px-3 py-2">
                 <StatusBadge status={a.final_status} />
+              </td>
+              <td className="px-3 py-2">
+                <SimtFlags flags={a} compact />
               </td>
               <td className="px-3 py-2 text-slate-500">{formatDate(a.created_at)}</td>
               <td className="px-3 py-2">

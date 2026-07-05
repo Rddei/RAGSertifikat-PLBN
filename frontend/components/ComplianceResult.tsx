@@ -1,11 +1,12 @@
 import { Card } from "@/components/ui/Card";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ReasoningView } from "@/components/ReasoningView";
+import { SimtFlags } from "@/components/SimtFlags";
 import { cn, scoreColor } from "@/lib/utils";
 import type { VerifyResponse } from "@/lib/types";
 
 export function ComplianceResult({ result }: { result: VerifyResponse }) {
-  const { audit, security, metadata, extraction } = result;
+  const { audit, security, metadata, extraction, flags } = result;
   const score = audit.skor_kepatuhan ?? 0;
   const scoreStyle = { width: `${Math.max(0, Math.min(100, score))}%` };
   const extractionEntries = Object.entries(extraction ?? {});
@@ -29,6 +30,8 @@ export function ComplianceResult({ result }: { result: VerifyResponse }) {
           <div className="h-full rounded-full bg-indigo-500" style={scoreStyle} />
         </div>
       </div>
+
+      {flags && <SimtFlags flags={flags} />}
 
       {audit.langkah_gagal && (
         <div className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">

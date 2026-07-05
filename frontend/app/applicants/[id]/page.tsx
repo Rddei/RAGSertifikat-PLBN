@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { Spinner } from "@/components/ui/Spinner";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ReasoningView } from "@/components/ReasoningView";
+import { SimtFlags } from "@/components/SimtFlags";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
 import { useRequireAuth } from "@/lib/useRequireAuth";
@@ -118,9 +119,13 @@ export default function ApplicantDetailPage() {
             <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field label="Jurusan Tujuan" value={applicant.target_major ?? "-"} />
               <Field label="Status AI" value={applicant.ai_status ?? "-"} />
+              <Field label="NISN" value={applicant.nisn ?? "-"} />
+              <Field label="Asal Sekolah" value={applicant.asal_sekolah ?? "-"} />
               <Field label="Batch" value={batchLabel} />
               <Field label="Tanggal" value={formatDate(applicant.created_at)} />
             </dl>
+
+            <SimtFlags flags={applicant} />
 
             {applicant.reasoning && (
               <div>
