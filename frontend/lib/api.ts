@@ -115,18 +115,20 @@ export const api = {
     return request<BatchStatus>(`/api/audit/batch/${batchId}`);
   },
 
-  // Unduh CSV: butuh header Authorization, jadi pakai fetch + blob, bukan <a href>.
-  async downloadExport(): Promise<void> {
+  // Unduh laporan (CSV/XLSX): butuh header Authorization, jadi pakai fetch + blob.
+  async downloadExport(format: "csv" | "xlsx" = "csv"): Promise<void> {
     const token = getToken();
     const headers = new Headers();
     if (token) headers.set("Authorization", `Bearer ${token}`);
-    const res = await fetch(`${API_URL}/api/applicants/export`, { headers });
-    if (!res.ok) throw new ApiError(res.status, "Gagal mengunduh CSV.");
+    const res = await fetch(`${API_URL}/api/applicants/export?format=${format}`, {
+      headers,
+    });
+    if (!res.ok) throw new ApiError(res.status, "Gagal mengunduh laporan.");
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "laporan_pendaftar.csv";
+    a.download = `laporan_pendaftar.${format}`;
     document.body.appendChild(a);
     a.click();
     a.remove();

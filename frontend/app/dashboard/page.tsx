@@ -45,13 +45,13 @@ export default function DashboardPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, isAuthenticated]);
 
-  async function handleExport() {
+  async function handleExport(format: "csv" | "xlsx") {
     setExporting(true);
     try {
-      await api.downloadExport();
-      toast.show("CSV berhasil diunduh.", "success");
+      await api.downloadExport(format);
+      toast.show(`${format.toUpperCase()} berhasil diunduh.`, "success");
     } catch (e) {
-      toast.show(e instanceof Error ? e.message : "Gagal mengunduh CSV.", "error");
+      toast.show(e instanceof Error ? e.message : "Gagal mengunduh laporan.", "error");
     } finally {
       setExporting(false);
     }
@@ -81,9 +81,14 @@ export default function DashboardPage() {
             
             {/* PROTEKSI UI: Tombol Export HANYA untuk Admin */}
             {user?.role === "admin" && (
-              <Button variant="secondary" loading={exporting} onClick={handleExport}>
-                Export CSV
-              </Button>
+              <>
+                <Button variant="secondary" loading={exporting} onClick={() => handleExport("csv")}>
+                  Export CSV
+                </Button>
+                <Button variant="secondary" loading={exporting} onClick={() => handleExport("xlsx")}>
+                  Export XLSX
+                </Button>
+              </>
             )}
           </div>
         </div>

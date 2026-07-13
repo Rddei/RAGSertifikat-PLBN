@@ -3,10 +3,11 @@ import logging
 
 from llama_index.llms.google_genai import GoogleGenAI
 
-from config import GOOGLE_API_KEY
+from config import GOOGLE_API_KEY, today_str_id
 from core.genai_utils import call_with_retry
 from services.puspresnas import format_for_audit
 from services.portfolio import format_for_audit_portfolio
+from services.kurasi_lokal import format_for_audit_kurasi
 
 logger = logging.getLogger("compliance.audit")
 llm = GoogleGenAI(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY)
@@ -55,20 +56,37 @@ def _extract_json(text: str) -> dict:
 async def run_audit(extracted: dict, target_major: str, expected_name: str,
                     fraud_flags: list, qr_data: list, rag_context: str,
                     puspresnas: dict | None = None,
-                    portfolio: dict | None = None) -> dict:
+                    portfolio: dict | None = None,
+                    kurasi: dict | None = None) -> dict:
     fraud_summary = fraud_flags if fraud_flags else "Bersih"
     qr_summary = qr_data if qr_data else "Tidak ditemukan"
-    puspresnas_summary = (
-        format_for_audit(puspresnas) if puspresnas
-        else "Pengecekan PUSPRESNAS tidak dijalankan."
-    )
+    # Utamakan hasil kurasi LOKAL (dari data scraping SIMT). Bila tidak ada,
+    # jatuh ke pengecekan live PUSPRESNAS (bila dijalankan), lalu ke pesan default.
+    if kurasi is not None:
+        kurasi_summary = format_for_audit_kurasi(kurasi)
+    elif puspresnas:
+        kurasi_summary = format_for_audit(puspresnas)
+    else:
+        kurasi_summary = "Pengecekan kurasi SIMT tidak dijalankan."
     portfolio_summary = (
         format_for_audit_portfolio(portfolio) if portfolio
         else "Pengecekan portofolio prestasi tidak dijalankan."
     )
+    hari_ini = today_str_id()
     prompt = f"""
 Anda adalah Auditor Admisi POLBAN Berbasis AI.
 Tugas Anda: Berikan penilaian kelayakan berdasarkan data berikut.
+
+TANGGAL HARI INI: {hari_ini}.
+ACUAN WAKTU (WAJIB DIPATUHI):
+- Gunakan tanggal di atas sebagai "sekarang".
+- Ajang/sertifikat dengan tanggal SEBELUM atau SAMA DENGAN hari ini berarti
+  SUDAH terjadi dan SAH untuk dinilai.
+- JANGAN menganggap suatu ajang "belum berlangsung", "masih di masa depan", atau
+  "tanggalnya tidak valid" hanya karena tahunnya terlihat besar (mis. 2025/2026).
+  Banyak kegiatan sah berlangsung di tahun berjalan.
+- JANGAN menolak, menurunkan skor, atau meragukan sertifikat semata-mata karena
+  asumsi soal waktu.
 
 DATA PENDAFTAR:
 {json.dumps(extracted, indent=2, ensure_ascii=False)}
@@ -84,10 +102,16 @@ ANTI-KECURANGAN:
 - QR/Barcode: {qr_summary}
 (Jika Flags menunjukkan indikasi editan, WAJIB Ditolak skor 0)
 
-INFORMASI EKSTERNAL SIMT PUSPRESNAS (HANYA FLAG/CATATAN - JANGAN dijadikan dasar skor):
-- Legalitas penyelenggara: {puspresnas_summary}
+INFORMASI KURASI SIMT (dari pencocokan ke data resmi SIMT hasil scraping):
+- Status kurasi ajang/penyelenggara: {kurasi_summary}
 - Keaslian sertifikat (portofolio): {portfolio_summary}
-CATATAN PENTING: Kedua poin di atas adalah PENANDA INFORMATIF untuk verifikator manusia. JANGAN menaikkan atau menurunkan skor_kepatuhan berdasarkan keduanya, dan JANGAN memasukkannya sebagai kriteria bernomor pada 'reasoning'. Skor & status hanya ditentukan oleh: pencocokan nama, anti-kecurangan, relevansi prestasi, dan kesesuaian jurusan.
+CATATAN PENTING: Kedua poin di atas adalah PENANDA INFORMATIF untuk verifikator
+manusia. JANGAN menaikkan atau menurunkan skor_kepatuhan berdasarkan keduanya,
+dan JANGAN memasukkannya sebagai kriteria bernomor pada 'reasoning'. Skor &
+status hanya ditentukan oleh: pencocokan nama, anti-kecurangan, relevansi
+prestasi, dan kesesuaian jurusan. Anda BOLEH menyebut status kurasi sebagai
+konteks pendukung di dalam poin 'Relevansi Prestasi', tetapi bukan sebagai
+penentu utama skor.
 
 KONTEKS ATURAN (RAG):
 {rag_context}

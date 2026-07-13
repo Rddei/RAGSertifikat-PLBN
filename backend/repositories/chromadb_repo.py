@@ -7,7 +7,7 @@ from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.vector_stores.chroma import ChromaVectorStore
 
-from config import GOOGLE_API_KEY, CHROMA_DB_PATH
+from config import GOOGLE_API_KEY, CHROMA_DB_PATH, EMBEDDING_MODEL
 
 logger = logging.getLogger("compliance.chromadb")
 
@@ -36,7 +36,7 @@ def _build_index() -> VectorStoreIndex:
     # LlamaIndex akan memakai LLM default-nya (OpenAI) saat menyusun jawaban RAG,
     # sehingga muncul error 401 "Incorrect API key" dari api.openai.com.
     Settings.embed_model = GoogleGenAIEmbedding(
-        model="models/embedding-001",
+        model=EMBEDDING_MODEL,
         api_key=GOOGLE_API_KEY,
     )
     Settings.llm = _get_llm()

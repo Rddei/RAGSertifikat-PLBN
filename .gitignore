@@ -56,4 +56,4 @@ Thumbs.db
 # -----------------------------------------------------------
 # Docker (jika nanti digunakan)
 # -----------------------------------------------------------
-docker-compose.override.yml
+docker-compose.override.ymlbackend/.env

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // TAMBAHKAN useRouter
+import { useRouter } from "next/navigation"; 
 import { Navbar } from "@/components/Navbar";
 import { FileUpload } from "@/components/FileUpload";
-// import { ComplianceResult } from "@/components/ComplianceResult"; // Kita nonaktifkan dulu karena kita akan redirect ke dashboard
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
@@ -23,7 +22,7 @@ export default function UploadPage() {
   const [jurusan, setJurusan] = useState("");
   
   const [loading, setLoading] = useState(false);
-  const [isPolling, setIsPolling] = useState(false); // STATE BARU UNTUK POLLING
+  const [isPolling, setIsPolling] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,40 +34,42 @@ export default function UploadPage() {
     setLoading(true);
     
     try {
-      // 1. Tembak API Upload (Sekarang merespons instan dengan status 202)
+      // 1. Tembak API Upload
       await api.verifyDocument(file, expectedName, jurusan);
       
       toast.show("Dokumen diterima! AI sedang menganalisis di latar belakang...", "success");
-      setIsPolling(true); // Mulai UI Polling
+      setIsPolling(true);
 
-      // 2. MEKANISME POLLING (Ping server setiap 3 detik)
+      // 2. MEKANISME POLLING
       let attempts = 0;
-      const maxAttempts = 20; // Maksimal 60 detik (20 * 3 dtk) untuk mencegah infinite loop
+      const maxAttempts = 20; 
       let isDone = false;
 
       while (attempts < maxAttempts && !isDone) {
         attempts++;
         
-        // Jeda 3 detik
         await new Promise((resolve) => setTimeout(resolve, 3000));
         
         try {
-          // Ambil daftar dokumen terbaru (Asumsi api.getApplicants memanggil GET /api/applicants)
           const res = await api.getApplicants();
           
-          // Cari apakah file yang baru saja diunggah sudah selesai diproses dan masuk DB
-          const processedDoc = res.data.find(
+          // PERBAIKAN: Antisipasi jika `res` berupa array langsung atau berada di dalam `res.data`
+          const responseData = res?.data || res;
+          
+          // Pastikan data benar-benar bertipe Array sebelum menjalankan .find()
+          const dataArray = Array.isArray(responseData) ? responseData : [];
+          
+          const processedDoc = dataArray.find(
             (doc: any) => doc.filename === file.name && doc.applicant_name === expectedName
           );
 
           if (processedDoc) {
             isDone = true;
             toast.show("Verifikasi Selesai! Mengalihkan ke hasil...", "success");
-            // Mengarahkan pengguna langsung ke halaman dashboard / detail
             router.push("/dashboard"); 
           }
         } catch (pollErr) {
-          console.error("Gagal mengecek status:", pollErr);
+          console.warn("Gagal mengecek status (Polling):", pollErr);
         }
       }
 
@@ -109,7 +110,7 @@ export default function UploadPage() {
                 onChange={(e) => setExpectedName(e.target.value)}
                 placeholder="mis. Budi Santoso"
                 required
-                disabled={loading || isPolling} // Kunci input saat loading
+                disabled={loading || isPolling}
               />
             </div>
             <div>
@@ -128,7 +129,6 @@ export default function UploadPage() {
               <label className="mb-1 block text-sm font-medium text-slate-700">
                 Berkas Sertifikat
               </label>
-              {/* Sembunyikan uploader saat AI sedang bekerja agar UI lebih fokus */}
               <FileUpload file={file} onSelect={setFile} disabled={loading || isPolling} />
             </div>
             
@@ -138,7 +138,6 @@ export default function UploadPage() {
               className="w-full relative"
               disabled={loading || isPolling}
             >
-              {/* Animasi teks yang dinamis */}
               {isPolling ? "AI Sedang Melakukan Audit (Harap Tunggu)..." : loading ? "Mengunggah..." : "Verifikasi Sekarang"}
             </Button>
           </form>

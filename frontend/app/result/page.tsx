@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ComplianceResult from "@/components/ComplianceResult";
-import { VerificationResult } from "@/lib/api";
+import { ComplianceResult } from "@/components/ComplianceResult";
+import type { VerifyResponse } from "@/lib/types";
 
 export default function ResultPage() {
   const router = useRouter();
-  const [data, setData] = useState<VerificationResult | null>(null);
+  const [data, setData] = useState<VerifyResponse | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("verificationResult");
@@ -29,7 +29,7 @@ export default function ResultPage() {
     <main className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold text-gray-900 text-center">Hasil Verifikasi</h1>
-        <ComplianceResult data={data} />
+        <ComplianceResult result={data} />
         <button
           onClick={() => router.push("/")}
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"

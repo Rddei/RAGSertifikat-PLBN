@@ -6,7 +6,8 @@ import { useParams } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Card } from "@/components/ui/Card";
 import { Spinner } from "@/components/ui/Spinner";
-import { StatusBadge } from "@/components/StatusBadge";
+import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
+import { Badge } from "@/components/ui/Badge";
 import { ReasoningView } from "@/components/ReasoningView";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
@@ -19,6 +20,53 @@ function Field({ label, value }: { label: string; value: string }) {
     <div className="rounded-lg bg-slate-50 p-3">
       <dt className="text-xs uppercase tracking-wide text-slate-400">{label}</dt>
       <dd className="mt-0.5 text-sm text-slate-700">{value}</dd>
+    </div>
+  );
+}
+
+// Render satu entri penandatangan "Nama (Jabatan)" -> nama tebal, jabatan abu-abu.
+function renderSignatory(text: string) {
+  const m = text.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+  if (m) {
+    return (
+      <>
+        <span className="font-medium text-slate-800">{m[1]}</span>{" "}
+        <span className="text-slate-500">({m[2]})</span>
+      </>
+    );
+  }
+  return text;
+}
+
+// Tampilkan penandatangan sebagai poin-poin (dipisah ";"). Bentang penuh 2 kolom.
+function SignatoriesField({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | null;
+}) {
+  const items = (value || "")
+    .split(/\s*;\s*/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  return (
+    <div className="rounded-lg bg-slate-50 p-3 sm:col-span-2">
+      <dt className="text-xs uppercase tracking-wide text-slate-400">{label}</dt>
+      {items.length === 0 ? (
+        <dd className="mt-0.5 text-sm text-slate-700">-</dd>
+      ) : items.length === 1 ? (
+        <dd className="mt-0.5 text-sm text-slate-700">{renderSignatory(items[0])}</dd>
+      ) : (
+        <dd className="mt-1">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
+            {items.map((item, i) => (
+              <li key={i}>{renderSignatory(item)}</li>
+            ))}
+          </ul>
+        </dd>
+      )}
     </div>
   );
 }
@@ -121,6 +169,94 @@ export default function ApplicantDetailPage() {
               <Field label="Batch" value={batchLabel} />
               <Field label="Tanggal" value={formatDate(applicant.created_at)} />
             </dl>
+
+            <div>
+              <h3 className="mb-2 text-sm font-medium text-slate-700">Data Sertifikat</h3>
+              <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Field label="Nama di Sertifikat" value={applicant.nama_peserta || "-"} />
+                <Field label="Nama Lomba" value={applicant.nama_lomba || "-"} />
+                <Field label="Singkatan" value={applicant.singkatan_lomba || "-"} />
+                <Field label="Penyelenggara" value={applicant.nama_penyelenggara || "-"} />
+                <Field label="Kategori" value={applicant.kategori || "-"} />
+                <Field label="Tingkat" value={applicant.tingkat || "-"} />
+                <Field label="Peringkat" value={applicant.peringkat || "-"} />
+                <Field label="Tanggal Kegiatan" value={applicant.tanggal_kegiatan || "-"} />
+                <Field label="No. Sertifikat" value={applicant.nomor_sertifikat || "-"} />
+                <SignatoriesField label="Penandatangan" value={applicant.penandatangan} />
+              </dl>
+
+              {applicant.url_verifikasi && (
+                <p className="mt-2 text-sm">
+                  <span className="text-slate-500">URL Verifikasi: </span>
+                  <a
+                    href={applicant.url_verifikasi}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="break-all text-brand-600 hover:underline"
+                  >
+                    {applicant.url_verifikasi}
+                  </a>
+                </p>
+              )}
+
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="text-xs uppercase tracking-wide text-slate-400">
+                  Pemeriksaan:
+                </span>
+                <Badge color={applicant.ada_cap ? "green" : "slate"}>
+                  {applicant.ada_cap ? "Ada Cap \u2713" : "Cap tidak terdeteksi \u2717"}
+                </Badge>
+                <Badge color={applicant.ada_ttd ? "green" : "slate"}>
+                  {applicant.ada_ttd ? "Ada TTD \u2713" : "TTD tidak terdeteksi \u2717"}
+                </Badge>
+              </div>
+
+              {applicant.deskripsi_cap &&
+                (() => {
+                  const caps = applicant.deskripsi_cap
+                    .split(/\s*;\s*/)
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                  return (
+                    <div className="mt-2 text-sm text-slate-600">
+                      <span className="text-slate-500">Deskripsi cap:</span>
+                      {caps.length <= 1 ? (
+                        <span> {applicant.deskripsi_cap}</span>
+                      ) : (
+                        <ul className="mt-1 list-disc space-y-1 pl-5">
+                          {caps.map((c, i) => (
+                            <li key={i}>{c}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })()}
+            </div>
+
+            {applicant.kurasi_status && (
+              <div className="rounded-lg border border-slate-200 p-3">
+                <div className="mb-1 flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-slate-700">Kurasi SIMT</h3>
+                  <KurasiBadge status={applicant.kurasi_status} />
+                </div>
+                {applicant.kurasi_ajang_terdekat ? (
+                  <p className="text-sm text-slate-600">
+                    Kandidat terdekat:{" "}
+                    <span className="font-medium">{applicant.kurasi_ajang_terdekat}</span>{" "}
+                    (skor nama {applicant.kurasi_skor_nama ?? "-"}, penyelenggara{" "}
+                    {applicant.kurasi_skor_penyelenggara ?? "-"}).
+                  </p>
+                ) : (
+                  <p className="text-sm text-slate-500">
+                    Tidak ada padanan di daftar terkurasi SIMT.
+                  </p>
+                )}
+                <p className="mt-1 text-xs text-slate-400">
+                  Penanda informatif untuk verifikator; tidak memengaruhi skor.
+                </p>
+              </div>
+            )}
 
             {applicant.reasoning && (
               <div>

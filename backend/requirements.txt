@@ -32,3 +32,4 @@ pymupdf                 # render halaman PDF -> gambar untuk fraud scan (opsiona
 # --- Scraping SIMT PUSPRESNAS (cek legalitas penyelenggara) ---
 httpx                   # HTTP client async untuk mengambil halaman SIMT
 beautifulsoup4          # parsing HTML hasil scraping
+openpyxl

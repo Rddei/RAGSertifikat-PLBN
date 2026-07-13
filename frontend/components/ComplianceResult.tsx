@@ -1,11 +1,11 @@
 import { Card } from "@/components/ui/Card";
-import { StatusBadge } from "@/components/StatusBadge";
+import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
 import { ReasoningView } from "@/components/ReasoningView";
 import { cn, scoreColor } from "@/lib/utils";
 import type { VerifyResponse } from "@/lib/types";
 
 export function ComplianceResult({ result }: { result: VerifyResponse }) {
-  const { audit, security, metadata, extraction } = result;
+  const { audit, security, metadata, extraction, kurasi } = result;
   const score = audit.skor_kepatuhan ?? 0;
   const scoreStyle = { width: `${Math.max(0, Math.min(100, score))}%` };
   const extractionEntries = Object.entries(extraction ?? {});
@@ -41,6 +41,36 @@ export function ComplianceResult({ result }: { result: VerifyResponse }) {
         <h3 className="mb-2 text-sm font-medium text-slate-700">Alasan Audit</h3>
         <ReasoningView text={audit.reasoning} />
       </div>
+
+      {kurasi && (
+        <div className="rounded-lg border border-slate-200 p-3">
+          <div className="mb-1 flex items-center justify-between">
+            <h3 className="text-sm font-medium text-slate-700">Kurasi SIMT</h3>
+            <KurasiBadge status={kurasi.status} />
+          </div>
+          {kurasi.checked ? (
+            kurasi.ajang_terdekat ? (
+              <p className="text-sm text-slate-600">
+                Kandidat terdekat:{" "}
+                <span className="font-medium">{kurasi.ajang_terdekat}</span>
+                {kurasi.penyelenggara_terdekat ? ` \u2014 ${kurasi.penyelenggara_terdekat}` : ""}{" "}
+                (skor nama {kurasi.skor_nama}, penyelenggara {kurasi.skor_penyelenggara}).
+              </p>
+            ) : (
+              <p className="text-sm text-slate-500">
+                Tidak ada padanan di daftar terkurasi SIMT.
+              </p>
+            )
+          ) : (
+            <p className="text-sm text-amber-700">
+              Status kurasi belum dapat diverifikasi{kurasi.error ? `: ${kurasi.error}` : "."}
+            </p>
+          )}
+          <p className="mt-1 text-xs text-slate-400">
+            Penanda informatif untuk verifikator; tidak memengaruhi skor.
+          </p>
+        </div>
+      )}
 
       {security.fraud_flags.length > 0 && (
         <div className="rounded-lg bg-red-50 p-3 text-sm text-red-800">

@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 
@@ -8,6 +9,7 @@ from core.vision import extract_certificate_data
 from core.retrieval import retrieve_rules
 from core.audit import run_audit
 from services.fraud import scan_for_fraud
+from services.kurasi_lokal import check_kurasi_lokal
 
 logger = logging.getLogger("compliance.agent")
 
@@ -20,39 +22,72 @@ async def process_single_application(
     expected_name: str,
     db: AsyncSession,
     batch_id: int | None = None,
-    verifikator_id: int | None = None,  # <-- PARAMETER BARU DITAMBAHKAN
+    verifikator_id: int | None = None,
 ) -> dict:
     logger.info("Memproses %s (jurusan=%s)", filename, target_major)
 
     # Stage 0: Fraud detection
     fraud_flags, qr_data = scan_for_fraud(image_bytes, content_type)
-    
+
     # Stage 1: Extraction
     extracted = await extract_certificate_data(image_bytes, content_type)
-    
+
     # Stage 2: RAG
     rag_context = await retrieve_rules(extracted, target_major)
-    
+
+    # Stage 2.5: Kurasi SIMT (lokal, dari data hasil scraping).
+    # Dijalankan di thread terpisah agar pencocokan (~ribuan baris) tidak
+    # memblokir event loop. AMAN: fungsi tidak melempar error.
+    kurasi = await asyncio.to_thread(
+        check_kurasi_lokal,
+        extracted.get("nama_lomba", ""),
+        extracted.get("singkatan_lomba", ""),
+        extracted.get("nama_penyelenggara", ""),
+        extracted.get("tingkat", ""),
+    )
+
     # Stage 3: Audit
     audit = await run_audit(
-        extracted, target_major, expected_name, fraud_flags, qr_data, rag_context
+        extracted, target_major, expected_name, fraud_flags, qr_data, rag_context,
+        kurasi=kurasi,
     )
 
     # Stage 4: Persist (dengan rollback bila gagal)
     applicant = Applicant(
         batch_id=batch_id,
-        verifikator_id=verifikator_id,  # <-- DISIMPAN KE DATABASE DI SINI
+        verifikator_id=verifikator_id,
         filename=filename,
         applicant_name=expected_name,
         target_major=target_major,
+        # --- Hasil ekstraksi sertifikat (Vision) ---
+        nama_peserta=extracted.get("nama_peserta", ""),
+        nama_lomba=extracted.get("nama_lomba", ""),
+        singkatan_lomba=extracted.get("singkatan_lomba", ""),
+        nama_penyelenggara=extracted.get("nama_penyelenggara", ""),
+        kategori=extracted.get("kategori", ""),
+        tingkat=extracted.get("tingkat", ""),
+        tanggal_kegiatan=extracted.get("tanggal", ""),
+        peringkat=extracted.get("peringkat", ""),
+        nomor_sertifikat=extracted.get("nomor_sertifikat", ""),
+        url_verifikasi=extracted.get("url_verifikasi", ""),
+        penandatangan=extracted.get("penandatangan", ""),
+        ada_cap=bool(extracted.get("ada_cap", False)),
+        deskripsi_cap=extracted.get("deskripsi_cap", ""),
+        ada_ttd=bool(extracted.get("ada_ttd", False)),
+        # --- Keamanan & audit ---
         fraud_flags=json.dumps(fraud_flags),
         qr_data=json.dumps(qr_data),
         skor_kepatuhan=audit.get("skor_kepatuhan", 0),
         ai_status=audit.get("status", "Unknown"),
         final_status=audit.get("status", "Unknown"),
         reasoning=audit.get("reasoning", ""),
+        # --- Kurasi SIMT (lokal, dari data hasil scraping) ---
+        kurasi_status=kurasi.get("status"),
+        kurasi_skor_nama=kurasi.get("skor_nama"),
+        kurasi_skor_penyelenggara=kurasi.get("skor_penyelenggara"),
+        kurasi_ajang_terdekat=kurasi.get("ajang_terdekat"),
     )
-    
+
     db.add(applicant)
     try:
         await db.commit()
@@ -66,6 +101,7 @@ async def process_single_application(
         "metadata": {"filename": filename, "target_major": target_major},
         "security": {"fraud_flags": fraud_flags, "qr_data": qr_data},
         "extraction": extracted,
+        "kurasi": kurasi,
         "audit": audit,
         "applicant_id": applicant.id,
     }

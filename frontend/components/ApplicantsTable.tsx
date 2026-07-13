@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { StatusBadge } from "@/components/StatusBadge";
+import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
+import { Badge } from "@/components/ui/Badge";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
 import { cn, formatDate, scoreColor } from "@/lib/utils";
@@ -46,6 +47,10 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
           <tr>
             <th className="px-3 py-2">Nama</th>
             <th className="px-3 py-2">Jurusan</th>
+            <th className="px-3 py-2">Lomba</th>
+            <th className="px-3 py-2">Tingkat</th>
+            <th className="px-3 py-2">Kurasi</th>
+            <th className="px-3 py-2">Cap/TTD</th>
             <th className="px-3 py-2">Skor</th>
             <th className="px-3 py-2">Status AI</th>
             <th className="px-3 py-2">Status Final</th>
@@ -59,6 +64,21 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
             <tr key={a.id} className="border-b border-slate-100 hover:bg-slate-50">
               <td className="px-3 py-2 font-medium">{a.applicant_name ?? "-"}</td>
               <td className="px-3 py-2 text-slate-600">{a.target_major ?? "-"}</td>
+              <td className="px-3 py-2 text-slate-600">{a.nama_lomba || "-"}</td>
+              <td className="px-3 py-2 text-slate-600">{a.tingkat || "-"}</td>
+              <td className="px-3 py-2">
+                <KurasiBadge status={a.kurasi_status} />
+              </td>
+              <td className="px-3 py-2">
+                <div className="flex gap-1">
+                  <Badge color={a.ada_cap ? "green" : "slate"}>
+                    Cap {a.ada_cap ? "\u2713" : "\u2717"}
+                  </Badge>
+                  <Badge color={a.ada_ttd ? "green" : "slate"}>
+                    TTD {a.ada_ttd ? "\u2713" : "\u2717"}
+                  </Badge>
+                </div>
+              </td>
               <td className={cn("px-3 py-2 font-semibold", scoreColor(a.skor_kepatuhan))}>
                 {a.skor_kepatuhan ?? "-"}
               </td>

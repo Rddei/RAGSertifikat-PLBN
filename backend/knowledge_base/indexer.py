@@ -32,13 +32,13 @@ sys.path.insert(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
 )
 
-from config import GOOGLE_API_KEY, CHROMA_DB_PATH  # noqa: E402
+from config import GOOGLE_API_KEY, CHROMA_DB_PATH, EMBEDDING_MODEL  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Konfigurasi Embedding Model
 # ---------------------------------------------------------------------------
 embed_model = GoogleGenAIEmbedding(
-    model="models/embedding-001",
+    model=EMBEDDING_MODEL,
     api_key=GOOGLE_API_KEY,
 )
 Settings.embed_model = embed_model
@@ -108,7 +108,7 @@ def build_knowledge_base() -> None:
 
     # Tahap 3 & 4: Embedding dan menyimpan ke ChromaDB
     print(f"[3/4] Mengonversi chunks menjadi vektor embedding...")
-    print(f"      Model: models/embedding-001")
+    print(f"      Model: {EMBEDDING_MODEL}")
     print(f"      Database: ChromaDB (path={CHROMA_DB_PATH})")
 
     chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
