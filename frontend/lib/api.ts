@@ -96,15 +96,11 @@ export const api = {
     });
   },
 
-  async startBatch(
-    files: File[],
-    expectedNames: string[],
-    jurusan: string,
-  ): Promise<BatchStartResponse> {
+  async startBatch(files: File[]): Promise<BatchStartResponse> {
+    // Mode file-only: identitas & jurusan di-lookup backend dari nama file
+    // '<id_pendaftar>-<indeks>.<ext>' terhadap master pendaftar.
     const form = new FormData();
     files.forEach((f) => form.append("files", f));
-    expectedNames.forEach((n) => form.append("expected_names", n));
-    form.append("jurusan_tujuan", jurusan);
     return request<BatchStartResponse>("/api/audit/batch", {
       method: "POST",
       body: form,
@@ -161,3 +157,21 @@ export const api = {
     });
   },
 };
+
+export function certificateFileUrl(id: number): string {
+  return `${API_URL}/api/applicants/${id}/file`;
+}
+
+/** Ambil berkas sertifikat (ber-token) lalu buka di tab baru. */
+export async function openCertificateFile(id: number): Promise<void> {
+  const token = getToken();
+  const res = await fetch(certificateFileUrl(id), {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) {
+    throw new ApiError(res.status, "Berkas sertifikat tidak tersedia di server.");
+  }
+  const url = URL.createObjectURL(await res.blob());
+  window.open(url, "_blank", "noopener");
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}

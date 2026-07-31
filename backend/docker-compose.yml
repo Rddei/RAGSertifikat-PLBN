@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15-alpine
@@ -27,6 +25,8 @@ services:
       - CHROMA_DB_PATH=/app/data/chroma_db
       - UPLOAD_DIR=/app/data/uploads
       - ENVIRONMENT=production
+      # Data kriteria resmi: path DI LUAR volume app_data agar selalu segar per build
+      - KRITERIA_JSON_PATH=/app/kriteria/kriteria_prodi.json
     volumes:
       - app_data:/app/data
     depends_on:

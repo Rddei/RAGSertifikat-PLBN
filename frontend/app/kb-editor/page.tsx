@@ -80,7 +80,7 @@ export default function KbEditorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen pt-12 lg:pl-56">
       <Navbar />
       <main className="mx-auto max-w-5xl space-y-6 px-4 py-8">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">

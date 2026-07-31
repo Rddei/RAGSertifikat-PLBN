@@ -12,6 +12,7 @@ env/
 chroma_db/
 uploads/
 data/
+!data/kriteria_prodi.json
 
 # Git & artefak
 .git/

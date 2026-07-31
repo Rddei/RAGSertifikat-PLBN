@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+npm-debug.log*
+Dockerfile
+.dockerignore
+.env
+.env.local
+*.zip
+README.md
+AGENTS.md
+CLAUDE.md
+FRONTEND_GUIDE.md

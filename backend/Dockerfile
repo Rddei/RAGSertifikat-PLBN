@@ -14,7 +14,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libzbar0 curl tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# PRAKTIK KEAMANAN TERBAIK: 
+# PRAKTIK KEAMANAN TERBAIK:
 # Buat user non-root SEBELUM menyalin file
 RUN useradd -m appuser
 
@@ -28,9 +28,11 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # (Mencegah error Permission Denied saat Admin mengedit Knowledge Base)
 COPY --chown=appuser:appuser . .
 
-# Buat folder data persisten dan pastikan hak akses mutlak untuk appuser
-RUN mkdir -p /app/data/chroma_db /app/data/uploads /app/knowledge_base/data \
-    && chown -R appuser:appuser /app/data /app/knowledge_base
+# Buat folder data persisten + salin data kriteria ke /app/kriteria.
+# PENTING: /app/kriteria berada DI LUAR mount volume 'app_data' (/app/data),
+# sehingga file kriteria selalu ikut versi terbaru setiap build image --
+# tidak tertutup volume lama (akar FileNotFoundError sebelumnya).
+RUN mkdir -p /app/data/chroma_db /app/data/uploads /app/knowledge_base/data /app/kriteria && cp data/kriteria_prodi.json /app/kriteria/kriteria_prodi.json && chown -R appuser:appuser /app/data /app/knowledge_base /app/kriteria
 
 # Ganti ke user non-root untuk menjalankan aplikasi
 USER appuser

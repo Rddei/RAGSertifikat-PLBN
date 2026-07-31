@@ -42,6 +42,20 @@ class User(Base):
     role = Column(String, default="verifikator", nullable=False)
 
 
+class Pendaftar(Base):
+    """
+    Master data pendaftar (diimpor dari CSV/XLSX admisi).
+    Sumber lookup nama + jurusan tujuan pada alur input berbasis nama file:
+    file '221524015-1.pdf' -> id_pendaftaran '221524015' -> baris tabel ini.
+    """
+    __tablename__ = "pendaftar"
+    id = Column(Integer, primary_key=True)
+    id_pendaftaran = Column(String, unique=True, index=True, nullable=False)
+    nama = Column(String, nullable=False)
+    jurusan_dituju = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
 class BatchJob(Base):
     __tablename__ = "batch_jobs"
     id = Column(Integer, primary_key=True)
@@ -62,9 +76,12 @@ class Applicant(Base):
     verifikator_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
     filename = Column(String, nullable=False)
-    # Nama dari data pendaftaran (form)
+    # Nama dari data pendaftaran (form ATAU lookup master pendaftar)
     applicant_name = Column(String)
     target_major = Column(String)
+    # Tautan ke master pendaftar (alur input berbasis nama file); null pada
+    # alur manual satuan lama.
+    id_pendaftaran = Column(String, index=True, nullable=True)
 
     # --- Hasil ekstraksi sertifikat (Gemini Vision) ---
     # Identitas
@@ -75,7 +92,8 @@ class Applicant(Base):
     nama_penyelenggara = Column(String)
     kategori = Column(String)
     tingkat = Column(String)               # Internasional/Nasional/Provinsi/Kab-Kota/Lokal
-    tanggal_kegiatan = Column(String)
+    tanggal_kegiatan = Column(String)      # tanggal PELAKSANAAN kegiatan
+    tanggal_terbit = Column(String)        # tanggal PENERBITAN sertifikat (blok ttd)
     # Kualifikasi
     peringkat = Column(String)             # Juara 1/2/3, Medali, dsb.
     # Keaslian
@@ -95,6 +113,10 @@ class Applicant(Base):
     # --- Keamanan & hasil audit ---
     fraud_flags = Column(Text)
     qr_data = Column(Text)
+    # Jejak lookup kriteria resmi (JSON): status tercantum/tidak/ambigu + alasan
+    kriteria_relevansi = Column(Text)
+    # Poin prestasi rubrik resmi (JSON): komponen + total/parsial + flag
+    skor_prestasi = Column(Text)
     skor_kepatuhan = Column(Float, default=0.0)
     ai_status = Column(String)
     final_status = Column(String)

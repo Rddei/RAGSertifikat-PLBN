@@ -30,6 +30,29 @@ export interface VerifyResponse {
   applicant_id: number;
 }
 
+export interface SkorPrestasi {
+  bidang: string | null;
+  poin_bidang: number | null;
+  tingkat: string | null;
+  poin_tingkat: number | null;
+  partisipasi: string | null;
+  poin_partisipasi: number | null;
+  total: number | null;
+  total_parsial: number;
+  belum_ternilai: string[];
+}
+
+export interface KriteriaRelevansi {
+  status: string;
+  prodi: string | null;
+  jenjang: string | null;
+  tingkat_normal: string | null;
+  item_cocok: string | null;
+  item_terdekat: string | null;
+  skor: number;
+  alasan: string;
+}
+
 export interface Applicant {
   id: number;
   batch_id: number | null;
@@ -63,6 +86,12 @@ export interface Applicant {
   kurasi_skor_penyelenggara: number | null;
   kurasi_ajang_terdekat: string | null;
 
+  // --- Fitur baru ---
+  id_pendaftaran: string | null;
+  tanggal_terbit: string | null;
+  kriteria_relevansi: KriteriaRelevansi | null;
+  skor_prestasi: SkorPrestasi | null;
+
   fraud_flags: string[];
   qr_data: string[];
   reasoning: string | null;
@@ -81,10 +110,24 @@ export interface LoginResponse {
   token_type: string;
 }
 
+export interface BatchAcceptedItem {
+  filename: string;
+  id_pendaftaran: string;
+  nama: string;
+  jurusan: string;
+}
+
+export interface BatchRejectedItem {
+  filename: string;
+  alasan: string;
+}
+
 export interface BatchStartResponse {
   message: string;
   batch_id: number;
   total_files: number;
+  accepted: BatchAcceptedItem[];
+  rejected: BatchRejectedItem[];
 }
 
 export interface BatchStatus {

@@ -4,27 +4,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import { Spinner } from "@/components/ui/Spinner";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
 import { useRequireAuth } from "@/lib/useRequireAuth";
-import type { BatchStatus } from "@/lib/types";
+import type { BatchAcceptedItem, BatchRejectedItem, BatchStatus } from "@/lib/types";
 
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 const MAX_MB = 20;
 const DONE_STATES = ["selesai", "completed", "complete", "done", "success"];
+// Sama dengan aturan backend: <id 4+ digit>-<indeks 1..3>.<ext>
+const FILENAME_PAT = /^\s*\d{4,}\s*-\s*[1-3](?:[\s._-].*)?\.(pdf|jpe?g|png|webp)\s*$/i;
 
 export default function BatchPage() {
   const { ready, isAuthenticated } = useRequireAuth();
   const toast = useToast();
   const [files, setFiles] = useState<File[]>([]);
-  const [names, setNames] = useState<string[]>([]);
-  const [jurusan, setJurusan] = useState("");
   const [starting, setStarting] = useState(false);
   const [batchId, setBatchId] = useState<number | null>(null);
   const [status, setStatus] = useState<BatchStatus | null>(null);
+  const [accepted, setAccepted] = useState<BatchAcceptedItem[]>([]);
+  const [rejected, setRejected] = useState<BatchRejectedItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   function addFiles(list: FileList | null) {
@@ -42,16 +43,10 @@ export default function BatchPage() {
       valid.push(f);
     }
     setFiles((prev) => [...prev, ...valid]);
-    setNames((prev) => [...prev, ...valid.map(() => "")]);
   }
 
   function removeFile(index: number) {
     setFiles((prev) => prev.filter((_, i) => i !== index));
-    setNames((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  function setName(index: number, value: string) {
-    setNames((prev) => prev.map((n, i) => (i === index ? value : n)));
   }
 
   const isDone = useCallback((s: BatchStatus | null) => {
@@ -91,17 +86,21 @@ export default function BatchPage() {
       toast.show("Tambahkan minimal satu berkas.", "error");
       return;
     }
-    if (!jurusan.trim()) {
-      toast.show("Isi jurusan tujuan.", "error");
-      return;
-    }
     setStarting(true);
     setStatus(null);
+    setAccepted([]);
+    setRejected([]);
     try {
-      const safeNames = names.map((n, i) => n.trim() || files[i].name);
-      const res = await api.startBatch(files, safeNames, jurusan);
+      const res = await api.startBatch(files);
       setBatchId(res.batch_id);
-      toast.show(`Batch #${res.batch_id} dimulai (${res.total_files} berkas).`, "success");
+      setAccepted(res.accepted ?? []);
+      setRejected(res.rejected ?? []);
+      const tolak = res.rejected?.length ?? 0;
+      toast.show(
+        `Batch #${res.batch_id}: ${res.total_files} diproses` +
+          (tolak > 0 ? `, ${tolak} ditolak` : ""),
+        tolak > 0 ? "error" : "success",
+      );
     } catch (e) {
       toast.show(e instanceof Error ? e.message : "Gagal memulai batch.", "error");
     } finally {
@@ -111,10 +110,10 @@ export default function BatchPage() {
 
   function reset() {
     setFiles([]);
-    setNames([]);
-    setJurusan("");
     setBatchId(null);
     setStatus(null);
+    setAccepted([]);
+    setRejected([]);
   }
 
   if (!ready || !isAuthenticated) {
@@ -131,26 +130,21 @@ export default function BatchPage() {
   const running = batchId !== null && !isDone(status);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-12 lg:pl-56">
       <Navbar />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
         <h1 className="text-2xl font-bold">Verifikasi Batch</h1>
         <p className="text-sm text-slate-500">
-          Unggah banyak sertifikat sekaligus. Sistem memproses di latar belakang dan hasilnya
-          muncul di Dashboard.
+          Cukup unggah berkas sertifikat. Nama pendaftar dan jurusan tujuan diambil
+          otomatis dari master pendaftar berdasarkan nama file
+          <span className="mx-1 rounded bg-slate-100 px-1 py-0.5 font-mono text-xs">
+            id-indeks.ext
+          </span>
+          (contoh: <span className="font-mono text-xs">426161036-1.jpg</span>, maksimum 3
+          sertifikat per pendaftar).
         </p>
 
         <Card className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Jurusan Tujuan</label>
-            <Input
-              value={jurusan}
-              onChange={(e) => setJurusan(e.target.value)}
-              placeholder="mis. Teknik Informatika"
-              disabled={running}
-            />
-          </div>
-
           <div
             onClick={() => !running && inputRef.current?.click()}
             className="cursor-pointer rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center transition hover:border-brand-400"
@@ -171,24 +165,27 @@ export default function BatchPage() {
 
           {files.length > 0 && (
             <ul className="space-y-2">
-              {files.map((f, i) => (
-                <li key={`${f.name}-${i}`} className="flex items-center gap-2">
-                  <Input
-                    value={names[i]}
-                    onChange={(e) => setName(i, e.target.value)}
-                    placeholder={`Nama pendaftar untuk ${f.name}`}
-                    disabled={running}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeFile(i)}
-                    disabled={running}
-                    className="shrink-0 text-xs text-slate-500 transition hover:text-red-600 disabled:opacity-50"
-                  >
-                    Hapus
-                  </button>
-                </li>
-              ))}
+              {files.map((f, i) => {
+                const patOk = FILENAME_PAT.test(f.name);
+                return (
+                  <li key={`${f.name}-${i}`} className="flex items-center gap-2 text-sm">
+                    <span className="min-w-0 flex-1 truncate font-mono text-xs">{f.name}</span>
+                    {!patOk && (
+                      <span className="shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[11px] text-amber-800">
+                        nama file tidak sesuai format
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => removeFile(i)}
+                      disabled={running}
+                      className="shrink-0 text-xs text-slate-500 transition hover:text-red-600 disabled:opacity-50"
+                    >
+                      Hapus
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           )}
 
@@ -203,6 +200,37 @@ export default function BatchPage() {
             )}
           </div>
         </Card>
+
+        {rejected.length > 0 && (
+          <Card className="space-y-2 border-amber-200 bg-amber-50">
+            <h2 className="text-sm font-semibold text-amber-900">
+              Ditolak di awal ({rejected.length})
+            </h2>
+            <ul className="space-y-1 text-xs text-amber-800">
+              {rejected.map((r, i) => (
+                <li key={`${r.filename}-${i}`}>
+                  <span className="font-mono">{r.filename}</span> — {r.alasan}
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
+
+        {accepted.length > 0 && (
+          <Card className="space-y-2">
+            <h2 className="text-sm font-semibold text-slate-700">
+              Teridentifikasi ({accepted.length})
+            </h2>
+            <ul className="space-y-1 text-xs text-slate-600">
+              {accepted.map((a, i) => (
+                <li key={`${a.filename}-${i}`}>
+                  <span className="font-mono">{a.filename}</span> &rarr; {a.nama}
+                  <span className="text-slate-400"> · {a.jurusan}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        )}
 
         {status && (
           <Card className="space-y-3">

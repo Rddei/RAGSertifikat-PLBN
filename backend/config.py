@@ -24,6 +24,19 @@ ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./chroma_db")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "models/text-embedding-004")  # HARUS sama antara indexer & query
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
+
+# Nama model dapat diganti lewat env tanpa menyentuh kode.
+# CATATAN: default sementara diarahkan ke gemini-3.1-flash-lite karena kuota
+# harian free-tier gemini-2.5-flash (20 RPD) tidak mencukupi untuk batch
+# evaluasi. Setelah billing aktif, kembalikan ke "gemini-2.5-flash" atau set
+# GEMINI_MODEL di .env.
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+
+# Sintesis RAG oleh LLM. Bila False (default), potongan pedoman diambil
+# langsung dari indeks vektor tanpa perantara LLM -> menghemat satu
+# panggilan API per berkas dan menghilangkan satu lapisan parafrase
+# sebelum konteks sampai ke auditor.
+RAG_SYNTHESIS = os.getenv("RAG_SYNTHESIS", "false").strip().lower() in ("1", "true", "ya")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./compliance.db")
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")  # set "production" saat deploy
 

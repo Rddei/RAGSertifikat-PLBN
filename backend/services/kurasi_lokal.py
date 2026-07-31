@@ -45,6 +45,8 @@ _STOPWORDS = {
     "antar", "pelajar", "tahun", "seri", "series", "the", "dan", "of", "and",
     "ke", "se", "competition", "kompetisi", "lomba", "festival", "olimpiade",
     "juara", "putra", "putri", "umum", "junior", "senior", "remaja",
+    # Label peran kepanitiaan -- bukan identitas instansi penyelenggara.
+    "panitia", "kepanitiaan", "pelaksana", "penyelenggara",
 }
 
 
@@ -218,6 +220,15 @@ def check_kurasi_lokal(
     n_lomba = _norm(nama_lomba)
     n_sing = _norm(singkatan)
     n_peny = _norm(nama_penyelenggara)
+    # Pecah string penyelenggara menjadi kandidat instansi: pemisah koma,
+    # titik-koma, garis miring, atau kata 'dan'. String utuh tetap ikut
+    # sebagai kandidat (menjaga kompatibilitas boost-substring lama).
+    peny_candidates = [
+        _norm(c) for c in re.split(r"[;,/]| dan ", str(nama_penyelenggara or ""))
+        if _norm(c)
+    ]
+    if n_peny and n_peny not in peny_candidates:
+        peny_candidates.append(n_peny)
     q_tok = _content_tokens(nama_lomba) | _content_tokens(singkatan)
     q_ptok = _content_tokens(nama_penyelenggara)
 
@@ -241,12 +252,21 @@ def check_kurasi_lokal(
         if len(n_lomba) >= 6 and (n_lomba in row["n_nama"] or row["n_nama"] in n_lomba):
             name_sim = max(name_sim, 0.90)
 
-        # --- Skor kemiripan penyelenggara ---
-        org_sim = _sim(n_peny, row["n_peny"]) if n_peny else 0.0
-        if n_peny and len(n_peny) >= 5 and (
-            n_peny in row["n_peny"] or row["n_peny"] in n_peny
-        ):
-            org_sim = max(org_sim, 0.90)
+        # --- Skor kemiripan penyelenggara (multi-kandidat) ---
+        # Sertifikat lazim mencantumkan beberapa instansi sekaligus (mis.
+        # Pemkab + KONI + federasi cabang). Semantik yang benar: MINIMAL SATU
+        # instansi yang tercantum adalah penyelenggara terdaftar di SIMT.
+        # Tiap kandidat diskor terpisah lalu diambil maksimum, sehingga
+        # instansi pengesah/pembina tidak "mencemari" skor penyelenggara asli.
+        org_sim, org_match = 0.0, ""
+        for cand in (peny_candidates or [n_peny]):
+            if not cand:
+                continue
+            s = _sim(cand, row["n_peny"])
+            if len(cand) >= 5 and (cand in row["n_peny"] or row["n_peny"] in cand):
+                s = max(s, 0.90)
+            if s > org_sim:
+                org_sim, org_match = s, cand
 
         combined = 0.6 * name_sim + 0.4 * org_sim
         if best is None or combined > best[0]:

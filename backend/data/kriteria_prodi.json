@@ -1,0 +1,1612 @@
+{
+ "sumber": "Data Lengkap Prodi SNBP 2026 (Kriteria_data_prestasi)",
+ "dibuat": "2026-07-18",
+ "entri": [
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Sipil",
+   "prodi": "Teknik Konstruksi Gedung",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota",
+    "Lokal"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Geography Olympiad (IGO)",
+     "International Earth Science Olympiad (IESO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Festival dan Lomba Seni Siswa Nasional"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Sipil",
+   "prodi": "Teknik Konstruksi Sipil",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Junior Science Olympiad (IJSO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Mesin",
+   "prodi": "Teknik Mesin",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Earth Science Olympiad (IESO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Ilmu Kebumian",
+     "Organisasi Ekstrakurikuler/Pramuka"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Mesin",
+   "prodi": "Teknik Aeronautika",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Olympiad in Informatics (IOI)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Refrigerasi dan Tata Udara",
+   "prodi": "Teknik Pendingin dan Tata Udara",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota",
+    "Lokal"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)",
+     "Lomba Kompetensi Siswa (LKS)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Konversi Energi",
+   "prodi": "Teknik Konversi Energi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia",
+     "Olimpiade Biologi",
+     "Olimpiade Ilmu Kebumian",
+     "Olimpiade Ekonomi",
+     "Olimpiade Geografi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Listrik",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia",
+     "Olimpiade Biologi",
+     "Olimpiade Ilmu Kebumian",
+     "Olimpiade Ekonomi",
+     "Olimpiade Geografi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Elektronika",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "SEA GAMES",
+     "International Robotics/Electronics Competition"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)",
+     "Lomba Robotik/Elektronika Tingkat Nasional"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Telekomunikasi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Kimia",
+   "prodi": "Teknik Kimia",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia",
+     "Olimpiade Biologi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Kimia",
+   "prodi": "Analis Kimia",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Earth Science Olympiad (IESO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Kimia"
+    ]
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Teknik Komputer dan Informatika",
+   "prodi": "Teknik Informatika",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Akuntansi",
+   "prodi": "Akuntansi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Ekonomi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Akuntansi",
+   "prodi": "Keuangan dan Perbankan",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Olimpiade Matematika",
+     "Olimpiade Ekonomi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Administrasi Bisnis",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa",
+    "SMA Agama/Teologi"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Usaha Perjalanan Wisata",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Linguistics Olympiad (IOL)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika"
+    ]
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Manajemen Pemasaran",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES",
+     "Tingkat internasional lainnya"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)",
+     "Tingkat internasional lainnya"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa",
+    "SMA Agama/Teologi"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D3",
+   "jurusan": "Bahasa Inggris",
+   "prodi": "Bahasa Inggris",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International English Olympiad (IEO)",
+     "National English Competition (NEC)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia",
+     "Olimpiade Biologi",
+     "Olimpiade Ilmu Kebumian",
+     "Olimpiade Ekonomi",
+     "Olimpiade Geografi",
+     "Organisasi Ekstrakurikuler/Pramuka"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Sipil",
+   "prodi": "Teknik Perancangan Jalan dan Jembatan",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Lomba Kompetensi Siswa Nasional"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Sipil",
+   "prodi": "Teknik Perawatan dan Perbaikan Gedung",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Mesin",
+   "prodi": "Teknik Perancangan dan Konstruksi Mesin",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Mesin",
+   "prodi": "Proses Manufaktur",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota",
+    "Lokal"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Festival Literasi Siswa Indonesia",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Refrigerasi dan Tata Udara",
+   "prodi": "Teknik Pendingin dan Tata Udara",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota",
+    "Lokal"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Chemistry Olympiad (IChO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)",
+     "Lomba Kompetensi Siswa (LKS) bidang refrigerasi dan tata udara",
+     "elektronika",
+     "atau kelistrikan"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Konversi Energi",
+   "prodi": "Teknologi Pembangkit Tenaga Listrik",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia"
+    ]
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Konversi Energi",
+   "prodi": "Teknik Konservasi Energi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "National Schools Debating Championship (NSDC)",
+     "Pekan Olahraga Nasional (PON)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia"
+    ]
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Telekomunikasi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Elektronika",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Junior Science Olympiad (IJSO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Pekan Olahraga Nasional (PON)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Elektro",
+   "prodi": "Teknik Otomasi Industri",
+   "tingkat_diakui": [
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Fisika"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Kimia",
+   "prodi": "Teknik Kimia Produksi Bersih",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 5.0,
+   "sma_diizinkan": [
+    "SMA IPA"
+   ],
+   "ma_diizinkan": [
+    "MA IPA"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Teknik Komputer dan Informatika",
+   "prodi": "Teknik Informatika",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Akuntansi",
+   "prodi": "Akuntansi Manajemen Pemerintahan",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES",
+     "International Accounting Competition"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Olimpiade Ekonomi",
+     "Organisasi Ekstrakurikuler/Pramuka",
+     "Olimpiade akuntansi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Akuntansi",
+   "prodi": "Keuangan Syariah",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Ekonomi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa",
+    "SMA Agama/Teologi"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Akuntansi",
+   "prodi": "Akuntansi",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Administrasi Bisnis",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Economics Olympiad (IEO)"
+    ],
+    "Nasional": [
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Ekonomi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Manajemen Aset",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Junior Science Olympiad (IJSO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olimpiade Matematika",
+     "Olimpiade Ekonomi"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa",
+    "SMA Agama/Teologi"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Manajemen Pemasaran",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional",
+    "Kabupaten/Kota",
+    "Lokal"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Mathematical Olympiad (IMO)",
+     "International Physics Olympiad (IPhO)",
+     "International Chemistry Olympiad (IChO)",
+     "International Biology Olympiad (IBO)",
+     "International Philosophy Olympiad (IPO)",
+     "International Astronomy Olympiad (IAO)",
+     "International Geography Olympiad (IGO)",
+     "International Linguistics Olympiad (IOL)",
+     "International Olympiad in Informatics (IOI)",
+     "International Junior Science Olympiad (IJSO)",
+     "International Earth Science Olympiad (IESO)",
+     "International Olympiad on Astronomy and Astrophysics (IOAA)",
+     "International History Olympiad (IHO)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": [
+     "Olahraga",
+     "Seni",
+     "Keagamaan",
+     "Olimpiade Matematika",
+     "Olimpiade Fisika",
+     "Olimpiade Kimia",
+     "Olimpiade Biologi",
+     "Olimpiade Ilmu Kebumian",
+     "Olimpiade Ekonomi",
+     "Olimpiade Geografi",
+     "Organisasi Ekstrakurikuler/Pramuka"
+    ]
+   },
+   "bobot": 10.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa",
+    "SMA Agama/Teologi"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa",
+    "MA Agama"
+   ]
+  },
+  {
+   "jenjang": "D4",
+   "jurusan": "Administrasi Niaga",
+   "prodi": "Destinasi Pariwisata",
+   "tingkat_diakui": [
+    "Internasional",
+    "Nasional"
+   ],
+   "prestasi": {
+    "Internasional": [
+     "International Linguistics Olympiad (IOL)",
+     "International Economics Olympiad (IEO)",
+     "SEA GAMES"
+    ],
+    "Nasional": [
+     "Olimpiade Sains Nasional (OSN)",
+     "Olimpiade Penelitian Siswa Indonesia (OPSI)",
+     "Olimpiade Olahraga Siswa Nasional",
+     "Festival dan Lomba Seni Siswa Nasional",
+     "Festival Literasi Siswa Indonesia",
+     "Fstival Inovasi dan Kewirausahaan Siswa Indonesia",
+     "Lomba Debat Bahasa Indonesia (LDBI)",
+     "National Schools Debating Championship (NSDC)",
+     "Lomba Kompetensi Siswa Nasional",
+     "Pekan Olahraga Nasional (PON)",
+     "Pekan Olahraga dan Seni (PORSENI)",
+     "Lomba Karya Ilmiah Remaja (LKIR)"
+    ],
+    "Kabupaten/Kota": []
+   },
+   "bobot": 20.0,
+   "sma_diizinkan": [
+    "SMA IPA",
+    "SMA IPS",
+    "SMA Bahasa"
+   ],
+   "ma_diizinkan": [
+    "MA IPA",
+    "MA IPS",
+    "MA Bahasa"
+   ]
+  }
+ ]
+}

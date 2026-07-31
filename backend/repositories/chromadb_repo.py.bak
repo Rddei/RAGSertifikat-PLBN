@@ -7,7 +7,7 @@ from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.llms.google_genai import GoogleGenAI
 from llama_index.vector_stores.chroma import ChromaVectorStore
 
-from config import GOOGLE_API_KEY, CHROMA_DB_PATH, EMBEDDING_MODEL, GEMINI_MODEL
+from config import GOOGLE_API_KEY, CHROMA_DB_PATH
 
 logger = logging.getLogger("compliance.chromadb")
 
@@ -20,11 +20,8 @@ def _get_llm() -> GoogleGenAI:
     global _llm
     if _llm is None:
         _llm = GoogleGenAI(
-            model=f"models/{GEMINI_MODEL}",
+            model="models/gemini-2.5-flash",
             api_key=GOOGLE_API_KEY,
-            # Deterministik: rag_context yang berubah-ubah antar-run terbukti
-            # membuat vonis relevansi tidak stabil (kasus uji Keyla).
-            temperature=0.0,
         )
     return _llm
 
@@ -39,7 +36,7 @@ def _build_index() -> VectorStoreIndex:
     # LlamaIndex akan memakai LLM default-nya (OpenAI) saat menyusun jawaban RAG,
     # sehingga muncul error 401 "Incorrect API key" dari api.openai.com.
     Settings.embed_model = GoogleGenAIEmbedding(
-        model=EMBEDDING_MODEL,
+        model="models/embedding-001",
         api_key=GOOGLE_API_KEY,
     )
     Settings.llm = _get_llm()
@@ -60,17 +57,4 @@ def get_query_engine():
     global _index
     if _index is None:
         _index = _build_index()
-    # similarity_top_k dinaikkan dari default (2) menjadi 8. KB memuat banyak
-    # prodi yang sering berbagi satu chunk (chunk_size=1024); dengan hanya 2
-    # chunk, aturan prodi tujuan sering TIDAK ikut terambil sehingga model
-    # keliru menyimpulkan "informasi tidak tersedia". Mengambil lebih banyak
-    # chunk membuat aturan prodi yang dicari jauh lebih mungkin ikut terbawa.
-    return _index.as_query_engine(llm=_get_llm(), similarity_top_k=8)
-
-
-def get_retriever():
-    """Retriever murni: mengembalikan potongan pedoman TANPA sintesis LLM."""
-    global _index
-    if _index is None:
-        _index = _build_index()
-    return _index.as_retriever(similarity_top_k=8)
+    return _index.as_query_engine(llm=_get_llm())

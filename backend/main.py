@@ -11,7 +11,7 @@ from config import (
 )
 from models.database import async_engine, AsyncSessionLocal, Base, User
 from security import hash_password
-from api.routes import auth, documents, batch, applicants, knowledge
+from api.routes import auth, documents, batch, applicants, knowledge, pendaftar
 
 logging.basicConfig(
     level=logging.INFO,
@@ -24,6 +24,15 @@ async def lifespan(app: FastAPI):
     # Buat tabel jika belum ada di PostgreSQL
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # create_all TIDAK menambah kolom pada tabel yang sudah ada, sehingga
+        # kolom baru dimigrasikan eksplisit (idempoten via IF NOT EXISTS).
+        for ddl in (
+            "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS id_pendaftaran VARCHAR",
+            "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS tanggal_terbit VARCHAR",
+            "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS kriteria_relevansi TEXT",
+            "ALTER TABLE applicants ADD COLUMN IF NOT EXISTS skor_prestasi TEXT",
+        ):
+            await conn.execute(text(ddl))
 
     # Seed admin dan verifikator default
     async with AsyncSessionLocal() as db:
@@ -83,6 +92,7 @@ app.include_router(documents.router)
 app.include_router(batch.router)
 app.include_router(applicants.router)
 app.include_router(knowledge.router) # Router fitur Knowledge Base
+app.include_router(pendaftar.router) # Router master pendaftar (alur file-only)
 
 @app.get("/health")
 async def health():

@@ -15,23 +15,24 @@
    meng-override skala "indigo" ke nilai yang sama, sehingga komponen yang
    sudah memakai kelas indigo-* otomatis ikut bertema POLBAN. */
 @theme {
-  --color-brand-50: #eef2fb;
-  --color-brand-100: #d7e0f3;
-  --color-brand-200: #b3c4e6;
-  --color-brand-300: #8aa3d6;
-  --color-brand-400: #5577bd;
-  --color-brand-500: #2f56ab;
-  --color-brand-600: #1e3f8f;
-  --color-brand-700: #16306e;
-  --color-brand-800: #112553;
-  --color-brand-900: #0d1d40;
+  /* AdminLTE primary (biru #3c8dbc) sebagai brand; indigo di-override agar ikut */
+  --color-brand-50: #eaf3f8;
+  --color-brand-100: #d0e5f0;
+  --color-brand-200: #a6cde2;
+  --color-brand-300: #79b3d3;
+  --color-brand-400: #559dc6;
+  --color-brand-500: #3c8dbc;
+  --color-brand-600: #3c8dbc;
+  --color-brand-700: #367fa9;
+  --color-brand-800: #2d6a8d;
+  --color-brand-900: #245571;
 
-  --color-indigo-50: #eef2fb;
-  --color-indigo-100: #d7e0f3;
-  --color-indigo-400: #5577bd;
-  --color-indigo-500: #2f56ab;
-  --color-indigo-600: #1e3f8f;
-  --color-indigo-700: #16306e;
+  --color-indigo-50: #eaf3f8;
+  --color-indigo-100: #d0e5f0;
+  --color-indigo-400: #559dc6;
+  --color-indigo-500: #3c8dbc;
+  --color-indigo-600: #3c8dbc;
+  --color-indigo-700: #367fa9;
 }
 
 html {
@@ -40,4 +41,12 @@ html {
 
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+
+/* === Polesan tema (referensi indigo modern) === */
+::selection { background: #c7d2fe; }
+:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

@@ -7,6 +7,8 @@ Google tidak langsung menggagalkan seluruh permintaan pengguna.
 """
 import asyncio
 import logging
+import random
+import re
 
 logger = logging.getLogger("compliance.genai")
 
@@ -37,13 +39,30 @@ def _status_code_of(exc: Exception):
     return None
 
 
+def _retry_delay_of(exc: Exception) -> float:
+    """Ambil saran jeda (detik) dari error 429 Gemini (RetryInfo), bila ada.
+
+    Google mengirim saran jeda pada balasan 429, mis. `"retryDelay": "34s"`
+    atau `retry_delay { seconds: 34 }`. Menghormatinya jauh lebih efektif
+    daripada backoff buta saat yang terjadi adalah limit per-menit (RPM).
+    """
+    msg = str(exc)
+    m = re.search(r"retry.?delay['\"]?\s*[:=]\s*['\"]?(\d+(?:\.\d+)?)s", msg, re.IGNORECASE)
+    if m:
+        return float(m.group(1))
+    m = re.search(r"seconds['\"]?\s*[:=]\s*(\d+)", msg, re.IGNORECASE)
+    if m:
+        return float(m.group(1))
+    return 0.0
+
+
 async def call_with_retry(
     coro_factory,
     *,
     what: str = "panggilan model AI",
-    max_attempts: int = 4,
+    max_attempts: int = 6,
     base_delay: float = 2.0,
-    max_delay: float = 30.0,
+    max_delay: float = 60.0,
 ):
     """Jalankan coroutine dengan retry + exponential backoff untuk error sementara.
 
@@ -86,10 +105,14 @@ async def call_with_retry(
                     "Silakan coba lagi beberapa saat lagi."
                 ) from exc
 
-            delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
+            backoff = min(base_delay * (2 ** (attempt - 1)), max_delay)
+            server_delay = _retry_delay_of(exc)
+            # Hormati saran server (RetryInfo) bila ada; jika tidak, pakai backoff.
+            delay = min(max(backoff, server_delay), max_delay) + random.uniform(0, 0.75)
             logger.warning(
-                "%s gagal (status=%s), percobaan %d/%d. Menunggu %.1fs lalu coba lagi...",
+                "%s gagal (status=%s), percobaan %d/%d. Menunggu %.1fs lalu coba lagi...%s",
                 what, status, attempt, max_attempts, delay,
+                f" (server menyarankan {server_delay:.0f}s)" if server_delay else "",
             )
             await asyncio.sleep(delay)
 

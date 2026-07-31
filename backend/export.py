@@ -24,6 +24,34 @@ def _format_json_list(raw: str | None) -> str:
     return str(data)
 
 
+
+def _format_skor_prestasi(raw: str | None) -> str:
+    """Ubah JSON skor_prestasi menjadi teks ringkas: total + rincian komponen."""
+    if not raw:
+        return ""
+    try:
+        d = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return str(raw)
+    if not isinstance(d, dict):
+        return str(raw)
+    total = d.get("total")
+    parsial = d.get("total_parsial")
+    nilai = total if total is not None else parsial
+    label = f"{nilai}" if nilai is not None else "-"
+    if total is None and parsial is not None:
+        label = f"{parsial} (parsial)"
+    komponen = []
+    if d.get("bidang"):
+        komponen.append(f"{d['bidang']} {d.get('poin_bidang','')}")
+    if d.get("tingkat"):
+        komponen.append(f"{d['tingkat']} {d.get('poin_tingkat','')}")
+    if d.get("partisipasi"):
+        komponen.append(f"{d['partisipasi']} {d.get('poin_partisipasi','')}")
+    rincian = "; ".join(k.strip() for k in komponen)
+    return f"{label} [{rincian}]" if rincian else label
+
+
 def _bool_label(value) -> str:
     """Ubah nilai boolean/None menjadi label ramah-laporan."""
     if value is True:
@@ -35,11 +63,11 @@ def _bool_label(value) -> str:
 
 # Definisi kolom terpusat -> dipakai CSV maupun XLSX agar selalu konsisten.
 HEADERS = [
-    "ID", "Nama Pendaftar (Form)", "Nama Peserta (Sertifikat)", "Jurusan Tujuan",
+    "ID", "ID Pendaftaran", "Nama Pendaftar (Form)", "Nama Peserta (Sertifikat)", "Jurusan Tujuan",
     "Nama Lomba", "Singkatan", "Penyelenggara", "Kategori", "Tingkat", "Peringkat",
     "Tanggal Kegiatan", "No. Sertifikat", "URL Verifikasi", "Penandatangan",
     "Ada Cap", "Deskripsi Cap", "Ada TTD",
-    "Skor Kepatuhan", "Status AI", "Status Final",
+    "Skor Kepatuhan", "Skor Prestasi", "Status AI", "Status Final",
     "Status Kurasi", "Skor Nama (Kurasi)", "Skor Penyelenggara (Kurasi)", "Ajang Terkurasi Terdekat",
     "Fraud Flags", "QR Data", "Reasoning", "Nama File", "Dibuat",
 ]
@@ -49,6 +77,7 @@ def _row(a: Applicant) -> list:
     """Petakan satu record Applicant ke satu baris laporan (urutan = HEADERS)."""
     return [
         a.id,
+        a.id_pendaftaran or "",
         a.applicant_name or "",
         a.nama_peserta or "",
         a.target_major or "",
@@ -66,6 +95,7 @@ def _row(a: Applicant) -> list:
         a.deskripsi_cap or "",
         _bool_label(a.ada_ttd),
         a.skor_kepatuhan if a.skor_kepatuhan is not None else "",
+        _format_skor_prestasi(a.skor_prestasi),
         a.ai_status or "",
         a.final_status or "",
         a.kurasi_status or "",

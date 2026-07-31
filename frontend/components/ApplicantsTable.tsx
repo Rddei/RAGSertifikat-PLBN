@@ -6,7 +6,7 @@ import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
-import { cn, formatDate, scoreColor } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { STATUS_OPTIONS, type Applicant } from "@/lib/types";
 
 interface Props {
@@ -51,7 +51,7 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
             <th className="px-3 py-2">Tingkat</th>
             <th className="px-3 py-2">Kurasi</th>
             <th className="px-3 py-2">Cap/TTD</th>
-            <th className="px-3 py-2">Skor</th>
+            <th className="px-3 py-2" title="Poin bobot prestasi menurut rubrik resmi">Poin</th>
             <th className="px-3 py-2">Status AI</th>
             <th className="px-3 py-2">Status Final</th>
             <th className="px-3 py-2">Tanggal</th>
@@ -79,8 +79,12 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
                   </Badge>
                 </div>
               </td>
-              <td className={cn("px-3 py-2 font-semibold", scoreColor(a.skor_kepatuhan))}>
-                {a.skor_kepatuhan ?? "-"}
+              <td className="px-3 py-2 font-semibold text-slate-800">
+                {a.skor_prestasi
+                  ? a.skor_prestasi.total !== null
+                    ? a.skor_prestasi.total
+                    : `${a.skor_prestasi.total_parsial}*`
+                  : "-"}
               </td>
               <td className="px-3 py-2">
                 <StatusBadge status={a.ai_status} />
