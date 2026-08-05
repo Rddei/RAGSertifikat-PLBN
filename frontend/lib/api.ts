@@ -111,6 +111,16 @@ export const api = {
     return request<BatchStatus>(`/api/audit/batch/${batchId}`);
   },
 
+  async startFolderIngest(subfolder: string): Promise<BatchStartResponse> {
+    // Impor batch dari folder di server. Backend membaca berkas pada folder,
+    // lookup pendaftar dari nama file, lalu memproses lewat pipeline batch.
+    return request<BatchStartResponse>("/api/audit/folder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subfolder }),
+    });
+  },
+
   // Unduh laporan (CSV/XLSX): butuh header Authorization, jadi pakai fetch + blob.
   async downloadExport(format: "csv" | "xlsx" = "csv"): Promise<void> {
     const token = getToken();

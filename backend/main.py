@@ -11,7 +11,7 @@ from config import (
 )
 from models.database import async_engine, AsyncSessionLocal, Base, User
 from security import hash_password
-from api.routes import auth, documents, batch, applicants, knowledge, pendaftar
+from api.routes import auth, documents, batch, applicants, knowledge, pendaftar, folder
 
 logging.basicConfig(
     level=logging.INFO,
@@ -93,6 +93,7 @@ app.include_router(batch.router)
 app.include_router(applicants.router)
 app.include_router(knowledge.router) # Router fitur Knowledge Base
 app.include_router(pendaftar.router) # Router master pendaftar (alur file-only)
+app.include_router(folder.router) # Router impor dari folder server (fitur tambahan)
 
 @app.get("/health")
 async def health():

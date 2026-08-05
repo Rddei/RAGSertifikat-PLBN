@@ -9,6 +9,7 @@ import { Spinner } from "@/components/ui/Spinner";
 import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { ReasoningView } from "@/components/ReasoningView";
+import { PhaseView } from "@/components/PhaseView";
 import { useToast } from "@/components/ui/Toast";
 import { api, openCertificateFile } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
@@ -140,7 +141,7 @@ export default function ApplicantDetailPage() {
   const batchLabel = applicant?.batch_id ? `#${applicant.batch_id}` : "-";
 
   return (
-    <div className="min-h-screen pt-12 lg:pl-56">
+    <div className="min-h-screen pt-12 lg:pl-16">
       <Navbar />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
         <div className="flex items-center justify-between">
@@ -194,6 +195,11 @@ export default function ApplicantDetailPage() {
               <Field label="Batch" value={batchLabel} />
               <Field label="Tanggal" value={formatDate(applicant.created_at)} />
             </dl>
+
+            <div>
+              <h3 className="mb-2 text-sm font-medium text-slate-700">Proses Verifikasi (3 Fase)</h3>
+              <PhaseView a={applicant} />
+            </div>
 
             <div>
               <h3 className="mb-2 text-sm font-medium text-slate-700">Data Sertifikat</h3>
@@ -263,94 +269,6 @@ export default function ApplicantDetailPage() {
                   );
                 })()}
             </div>
-
-            {applicant.kurasi_status && (
-              <div className="rounded-lg border border-slate-200 p-3">
-                <div className="mb-1 flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-slate-700">Kurasi SIMT</h3>
-                  <KurasiBadge status={applicant.kurasi_status} />
-                </div>
-                {applicant.kurasi_ajang_terdekat ? (
-                  <p className="text-sm text-slate-600">
-                    Kandidat terdekat:{" "}
-                    <span className="font-medium">{applicant.kurasi_ajang_terdekat}</span>{" "}
-                    (skor nama {applicant.kurasi_skor_nama ?? "-"}, penyelenggara{" "}
-                    {applicant.kurasi_skor_penyelenggara ?? "-"}).
-                  </p>
-                ) : (
-                  <p className="text-sm text-slate-500">
-                    Tidak ada padanan di daftar terkurasi SIMT.
-                  </p>
-                )}
-                <p className="mt-1 text-xs text-slate-400">
-                  Penanda informatif untuk verifikator; tidak memengaruhi skor.
-                </p>
-              </div>
-            )}
-
-            {!applicant.skor_prestasi && (
-              <div className="rounded-lg border border-slate-200 p-3">
-                <h3 className="text-sm font-medium text-slate-700">
-                  Poin Prestasi (Rubrik Resmi)
-                </h3>
-                <p className="mt-1 text-2xl font-bold text-slate-400">-</p>
-                <p className="mt-1 text-xs text-slate-400">
-                  Tidak dihitung: berkas berada di luar kategori sertifikat
-                  prestasi perlombaan.
-                </p>
-              </div>
-            )}
-
-            {applicant.skor_prestasi && (
-              <div className="rounded-lg border border-slate-200 p-3">
-                <div className="mb-2 flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-slate-700">
-                    Poin Prestasi (Rubrik Resmi)
-                  </h3>
-                  <span className="text-sm font-semibold text-slate-800">
-                    {applicant.skor_prestasi.total !== null
-                      ? `${applicant.skor_prestasi.total} poin`
-                      : `${applicant.skor_prestasi.total_parsial} poin (parsial)`}
-                  </span>
-                </div>
-                <dl className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-3">
-                  <div className="rounded bg-slate-50 p-2">
-                    <dt className="text-xs text-slate-400">Bidang</dt>
-                    <dd className="text-slate-700">
-                      {applicant.skor_prestasi.bidang ?? "belum ternilai"}
-                      {applicant.skor_prestasi.poin_bidang !== null &&
-                        ` — ${applicant.skor_prestasi.poin_bidang}`}
-                    </dd>
-                  </div>
-                  <div className="rounded bg-slate-50 p-2">
-                    <dt className="text-xs text-slate-400">Tingkat</dt>
-                    <dd className="text-slate-700">
-                      {applicant.skor_prestasi.tingkat ?? "belum ternilai"}
-                      {applicant.skor_prestasi.poin_tingkat !== null &&
-                        ` — ${applicant.skor_prestasi.poin_tingkat}`}
-                    </dd>
-                  </div>
-                  <div className="rounded bg-slate-50 p-2">
-                    <dt className="text-xs text-slate-400">Individu/Kelompok</dt>
-                    <dd className="text-slate-700">
-                      {applicant.skor_prestasi.partisipasi ?? "belum ternilai"}
-                      {applicant.skor_prestasi.poin_partisipasi !== null &&
-                        ` — ${applicant.skor_prestasi.poin_partisipasi}`}
-                    </dd>
-                  </div>
-                </dl>
-                {applicant.skor_prestasi.belum_ternilai.length > 0 && (
-                  <p className="mt-2 text-xs text-amber-700">
-                    Perlu dilengkapi verifikator:{" "}
-                    {applicant.skor_prestasi.belum_ternilai.join(", ")}.
-                  </p>
-                )}
-                <p className="mt-1 text-xs text-slate-400">
-                  Poin bobot prestasi menurut rubrik resmi; terpisah dari skor
-                  kepatuhan dan tidak memengaruhi status.
-                </p>
-              </div>
-            )}
 
             {applicant.kriteria_relevansi && (
               <div className="rounded-lg border border-slate-200 p-3">

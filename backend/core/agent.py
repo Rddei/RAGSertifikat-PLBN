@@ -91,6 +91,7 @@ async def process_single_application(
 ) -> dict:
     logger.info("Memproses %s (jurusan=%s)", filename, target_major)
 
+    # ===== FASE 1 (bagian awal): deteksi kecurangan, ekstraksi, gerbang jenis =====
     # Stage 0: Fraud detection
     fraud_flags, qr_data = scan_for_fraud(image_bytes, content_type)
 
@@ -125,12 +126,14 @@ async def process_single_application(
             db, filename, expected_name, target_major, batch_id,
             verifikator_id, id_pendaftaran, extracted, fraud_flags, qr_data)
 
-    # Stage 2: RAG
-    rag_context = await retrieve_rules(extracted, target_major)
-
-    # Stage 2.5: Kurasi SIMT (lokal, dari data hasil scraping).
-    # Dijalankan di thread terpisah agar pencocokan (~ribuan baris) tidak
-    # memblokir event loop. AMAN: fungsi tidak melempar error.
+    # =====================================================================
+    # FASE 1 -- EKSTRAKSI & PENYARINGAN
+    # Ekstraksi (Stage 1 di atas), gerbang jenis (di atas), dan kurasi SIMT.
+    # Tahap ini TIDAK bergantung pada jurusan tujuan; berlaku untuk semua
+    # sertifikat sebelum identitas & relevansi diperiksa.
+    # ---------------------------------------------------------------------
+    # Kurasi SIMT (lokal). Dijalankan di thread terpisah agar pencocokan
+    # (~ribuan baris) tidak memblokir event loop. AMAN: tidak melempar error.
     kurasi = await asyncio.to_thread(
         check_kurasi_lokal,
         extracted.get("nama_lomba", ""),
@@ -139,9 +142,17 @@ async def process_single_application(
         extracted.get("tingkat", ""),
     )
 
-    # Stage 2.6: Lookup kriteria resmi (deterministik, in-memory -> murah).
-    # Hasilnya menjadi FAKTA relevansi bagi auditor; RAG turun peran jadi
-    # konteks naratif. Fail-safe: status 'ambigu' bila ada masalah.
+    # =====================================================================
+    # FASE 2 -- IDENTITAS & RELEVANSI
+    # Identitas (target_major/expected_name dari lookup di route) menentukan
+    # daftar acuan. Di sini relevansi diperiksa terhadap kriteria prodi
+    # tujuan; RAG mengambil konteks aturan prodi tersebut.
+    # ---------------------------------------------------------------------
+    # RAG: konteks aturan prodi tujuan (butuh jurusan -> Fase 2).
+    rag_context = await retrieve_rules(extracted, target_major)
+
+    # Lookup kriteria resmi (deterministik, in-memory -> murah). Hasilnya
+    # menjadi FAKTA relevansi bagi auditor. Fail-safe: 'ambigu' bila bermasalah.
     kriteria_resmi = check_relevansi(
         target_major,
         extracted.get("nama_lomba", ""),
@@ -150,9 +161,13 @@ async def process_single_application(
         extracted.get("tingkat", ""),
     )
 
-    # Stage 2.7: Poin prestasi menurut rubrik resmi (deterministik,
-    # INFORMATIF -- terpisah total dari vonis kepatuhan; tidak dikirim
-    # ke LLM agar tidak mencemari penilaian kriteria).
+    # =====================================================================
+    # FASE 3 -- PENILAIAN
+    # Poin prestasi menurut rubrik (jenjang + kategori + individu/kelompok),
+    # lalu audit kepatuhan yang menghasilkan status akhir.
+    # ---------------------------------------------------------------------
+    # Poin prestasi (deterministik, INFORMATIF -- terpisah total dari vonis
+    # kepatuhan; tidak dikirim ke LLM agar tidak mencemari penilaian kriteria).
     skor_prestasi = hitung_skor_prestasi(
         extracted.get("kategori", ""),
         extracted.get("nama_lomba", ""),
@@ -160,7 +175,7 @@ async def process_single_application(
         extracted.get("peringkat", ""),
     )
 
-    # Stage 3: Audit
+    # Audit kepatuhan (3 kriteria) -> status akhir.
     audit = await run_audit(
         extracted, target_major, expected_name, fraud_flags, qr_data, rag_context,
         kurasi=kurasi,

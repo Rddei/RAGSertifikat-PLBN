@@ -95,7 +95,7 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen pt-12 lg:pl-56">
+    <div className="min-h-screen pt-12 lg:pl-16">
       <Navbar />
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-8">
         <h1 className="text-2xl font-bold">Verifikasi Sertifikat</h1>

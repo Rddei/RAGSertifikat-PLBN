@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { StatusBadge, KurasiBadge } from "@/components/StatusBadge";
-import { Badge } from "@/components/ui/Badge";
+import { StatusBadge } from "@/components/StatusBadge";
 import { useToast } from "@/components/ui/Toast";
 import { api } from "@/lib/api";
-import { formatDate } from "@/lib/utils";
 import { STATUS_OPTIONS, type Applicant } from "@/lib/types";
 
 interface Props {
@@ -48,13 +46,8 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
             <th className="px-3 py-2">Nama</th>
             <th className="px-3 py-2">Jurusan</th>
             <th className="px-3 py-2">Lomba</th>
-            <th className="px-3 py-2">Tingkat</th>
-            <th className="px-3 py-2">Kurasi</th>
-            <th className="px-3 py-2">Cap/TTD</th>
             <th className="px-3 py-2" title="Poin bobot prestasi menurut rubrik resmi">Poin</th>
-            <th className="px-3 py-2">Status AI</th>
             <th className="px-3 py-2">Status Final</th>
-            <th className="px-3 py-2">Tanggal</th>
             <th className="px-3 py-2">Ubah Status</th>
             <th className="px-3 py-2">Detail</th>
           </tr>
@@ -65,20 +58,6 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
               <td className="px-3 py-2 font-medium">{a.applicant_name ?? "-"}</td>
               <td className="px-3 py-2 text-slate-600">{a.target_major ?? "-"}</td>
               <td className="px-3 py-2 text-slate-600">{a.nama_lomba || "-"}</td>
-              <td className="px-3 py-2 text-slate-600">{a.tingkat || "-"}</td>
-              <td className="px-3 py-2">
-                <KurasiBadge status={a.kurasi_status} />
-              </td>
-              <td className="px-3 py-2">
-                <div className="flex gap-1">
-                  <Badge color={a.ada_cap ? "green" : "slate"}>
-                    Cap {a.ada_cap ? "\u2713" : "\u2717"}
-                  </Badge>
-                  <Badge color={a.ada_ttd ? "green" : "slate"}>
-                    TTD {a.ada_ttd ? "\u2713" : "\u2717"}
-                  </Badge>
-                </div>
-              </td>
               <td className="px-3 py-2 font-semibold text-slate-800">
                 {a.skor_prestasi
                   ? a.skor_prestasi.total !== null
@@ -87,12 +66,8 @@ export function ApplicantsTable({ applicants, onChanged }: Props) {
                   : "-"}
               </td>
               <td className="px-3 py-2">
-                <StatusBadge status={a.ai_status} />
-              </td>
-              <td className="px-3 py-2">
                 <StatusBadge status={a.final_status} />
               </td>
-              <td className="px-3 py-2 text-slate-500">{formatDate(a.created_at)}</td>
               <td className="px-3 py-2">
                 <select
                   disabled={busyId === a.id}
